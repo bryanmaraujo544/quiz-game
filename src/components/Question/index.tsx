@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Alternative } from './styles';
 import { Modal } from '../Modal';
 import { motion, useAnimation } from 'framer-motion';
@@ -29,6 +29,25 @@ export const Question = ({
   const contentControls = useAnimation();
   const questionControls = useAnimation();
 
+  useEffect(() => {
+    (async () => {
+      await resultControls.start({
+        y: 0,
+        opacity: 1,
+        transition: {
+          duration: 0.25,
+        },
+      });
+      questionControls.start({
+        y: 0,
+        opacity: 1,
+        transition: {
+          duration: 0.5,
+        },
+      });
+    })();
+  });
+
   function handleAnswerQuestion(answer: string) {
     setAnswerChosen(answer);
     setIsModalOpen(true);
@@ -36,8 +55,7 @@ export const Question = ({
 
   async function handleConfirmAnswer() {
     const isCorrect = answerChosen === correctAnswer;
-
-    setIsModalOpen(false);
+    console.log({ isCorrect });
     await questionControls.start({
       y: -150,
       opacity: 0,
@@ -63,16 +81,16 @@ export const Question = ({
       setIncorrectAnswersAmount((prevAmount: number) => (prevAmount += 1));
     }
 
+    setIsModalOpen(false);
     handlePassToNextQuestion();
   }
-
-  // function
 
   return (
     <Container
       isLarge={content?.length > 48}
       as={motion.div}
       animate={questionControls}
+      initial={{ y: -100, opacity: 0 }}
     >
       <motion.div className="question-container">
         <p className="question">{content}</p>

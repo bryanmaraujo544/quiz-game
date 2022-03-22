@@ -89,7 +89,11 @@ export const Room = () => {
   return (
     <Container>
       <QuestionBoard>
-        <motion.div className="result-board" animate={resultControls}>
+        <motion.div
+          className="result-board"
+          animate={resultControls}
+          initial={{ y: -100, opacity: 0 }}
+        >
           <div className="result">
             <p>Correct</p> <p>{correctAnswersAmount}</p>
           </div>
