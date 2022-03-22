@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Container, Alternative } from './styles';
 import { Modal } from '../Modal';
-
+import { motion, useAnimation } from 'framer-motion';
 interface Props {
   content: string;
   alternatives: string[];
@@ -9,6 +9,7 @@ interface Props {
   handlePassToNextQuestion: any;
   setCorrectAnswersAmount: any;
   setIncorrectAnswersAmount: any;
+  resultControls: any;
 }
 
 export const Question = ({
@@ -18,19 +19,42 @@ export const Question = ({
   setCorrectAnswersAmount,
   setIncorrectAnswersAmount,
   handlePassToNextQuestion,
+  resultControls,
 }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [answerChosen, setAnswerChosen] = useState('');
+
+  const alternativesControls = useAnimation();
+  const contentControls = useAnimation();
+  const questionControls = useAnimation();
 
   function handleAnswerQuestion(answer: string) {
     setAnswerChosen(answer);
     setIsModalOpen(true);
   }
 
-  function handleConfirmAnswer() {
+  async function handleConfirmAnswer() {
     const isCorrect = answerChosen === correctAnswer;
-    console.log({ isCorrect });
+
+    setIsModalOpen(false);
+    await questionControls.start({
+      y: -150,
+      opacity: 0,
+    });
+    questionControls.start({
+      y: 0,
+      opacity: 1,
+    });
+
+    await resultControls.start({
+      y: -200,
+      opacity: 0,
+    });
+    resultControls.start({
+      y: 0,
+      opacity: 1,
+    });
 
     if (isCorrect) {
       // TODO: handle to pass
@@ -40,18 +64,21 @@ export const Question = ({
     }
 
     handlePassToNextQuestion();
-    setIsModalOpen(false);
   }
 
   // function
 
   return (
-    <Container isLarge={content.length > 48}>
-      <div className="question-container">
+    <Container
+      isLarge={content?.length > 48}
+      as={motion.div}
+      animate={questionControls}
+    >
+      <motion.div className="question-container">
         <p className="question">{content}</p>
-      </div>
-      <div className="alternatives">
-        {alternatives.map((alternative) => (
+      </motion.div>
+      <motion.div className="alternatives">
+        {alternatives?.map((alternative) => (
           <Alternative
             className="alternative"
             onClick={() => handleAnswerQuestion(alternative)}
@@ -59,7 +86,7 @@ export const Question = ({
             {alternative}
           </Alternative>
         ))}
-      </div>
+      </motion.div>
       <Modal
         title="Confirm you answer?"
         isModalOpen={isModalOpen}

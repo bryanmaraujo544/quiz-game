@@ -1,4 +1,5 @@
-import { ReactNode } from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { ReactNode, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 
@@ -11,6 +12,34 @@ interface Props {
   setIsModalOpen: any;
 }
 
+const overlayVariants = {
+  hidden: {
+    transition: {
+      when: 'afterChildren',
+    },
+    opacity: 0,
+    display: 'none',
+  },
+  show: {
+    transition: {
+      when: 'beforeChildren',
+    },
+    opacity: 1,
+    display: 'flex',
+  },
+};
+
+const modalVariants = {
+  hidden: {
+    opacity: 1,
+    scale: 0,
+  },
+  show: {
+    opacity: 1,
+    scale: 1,
+  },
+};
+
 export const Modal = ({
   children,
   title,
@@ -19,9 +48,25 @@ export const Modal = ({
 }: Props) => {
   console.log('oi');
 
+  const overlayControls = useAnimation();
+  const modalControls = useAnimation();
+
+  useEffect(() => {
+    if (isModalOpen) {
+      overlayControls.start('show');
+    } else {
+      overlayControls.start('hidden');
+    }
+  }, [isModalOpen]);
+
   return ReactDOM.createPortal(
-    <Overlay isOpen={isModalOpen}>
-      <ModalContainer>
+    <Overlay
+      isOpen={isModalOpen}
+      as={motion.div}
+      variants={overlayVariants}
+      animate={overlayControls}
+    >
+      <ModalContainer as={motion.div} variants={modalVariants}>
         <div className="header">
           <h3>{title}</h3>
           <AiOutlineCloseCircle
