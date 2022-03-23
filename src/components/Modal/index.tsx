@@ -16,6 +16,7 @@ const overlayVariants = {
   hidden: {
     transition: {
       when: 'afterChildren',
+      duration: 0.1,
     },
     opacity: 0,
     display: 'none',
@@ -23,6 +24,7 @@ const overlayVariants = {
   show: {
     transition: {
       when: 'beforeChildren',
+      duration: 0.1,
     },
     opacity: 1,
     display: 'flex',

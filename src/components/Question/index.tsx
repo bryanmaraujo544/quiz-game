@@ -58,20 +58,24 @@ export const Question = ({
     await questionControls.start({
       y: -150,
       opacity: 0,
+      transition: { duration: 0.1 },
     });
-
     questionControls.start({
       y: 0,
       opacity: 1,
+      transition: { duration: 0.25 },
     });
 
     await resultControls.start({
       y: -200,
       opacity: 0,
+      transition: { duration: 0.1 },
     });
+
     resultControls.start({
       y: 0,
       opacity: 1,
+      transition: { duration: 0.25 },
     });
 
     if (isCorrect) {
@@ -81,7 +85,6 @@ export const Question = ({
       setIncorrectAnswersAmount((prevAmount: number) => (prevAmount += 1));
     }
     setIsModalOpen(false);
-
     handlePassToNextQuestion();
   }
 

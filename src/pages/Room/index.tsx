@@ -4,6 +4,7 @@ import { Question } from '../../components/Question';
 import { Modal } from '../../components/Modal';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
+import { ResultModal } from './ResultModal';
 
 const rooms = [
   {
@@ -122,27 +123,13 @@ export const Room = () => {
           resultControls={resultControls}
         />
       </QuestionBoard>
-      <Modal
-        title="These are your results"
+      <ResultModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-      >
-        <div className="result-board">
-          <div className="result">
-            <p>Correct</p> <p>{correctAnswersAmount}</p>
-          </div>
-          <div className="result">
-            <p>Incorrect</p> <p>{incorrectAnswersAmount}</p>
-          </div>
-        </div>
-        <button
-          type="button"
-          className="reset-btn"
-          onClick={() => handleRestartQuiz()}
-        >
-          Reset
-        </button>
-      </Modal>
+        correctAnswersAmount={correctAnswersAmount}
+        incorrectAnswersAmount={incorrectAnswersAmount}
+        handleRestartQuiz={handleRestartQuiz}
+      />
     </Container>
   );
 };
