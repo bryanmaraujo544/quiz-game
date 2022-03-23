@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container, QuestionBoard } from './styles';
+import { Container, QuestionBoard, Header, SideInfos } from './styles';
 import { Question } from '../../components/Question';
 import { Modal } from '../../components/Modal';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -89,21 +89,29 @@ export const Room = () => {
   return (
     <Container>
       <QuestionBoard>
-        <motion.div
-          className="result-board"
-          animate={resultControls}
-          initial={{ y: -100, opacity: 0 }}
-        >
-          <div className="result">
-            <p>Correct</p> <p>{correctAnswersAmount}</p>
-          </div>
-          <div className="result">
-            <p>Incorrect</p> <p>{incorrectAnswersAmount}</p>
-          </div>
-          <div className="home-button" onClick={() => navigate('/')}>
-            Home
-          </div>
-        </motion.div>
+        <Header>
+          <SideInfos>
+            <p className="people-progress">12/50</p>
+          </SideInfos>
+          <motion.div
+            className="result-board"
+            animate={resultControls}
+            initial={{ y: -100, opacity: 0 }}
+          >
+            <div className="result">
+              <p>Correct</p> <p>{correctAnswersAmount}</p>
+            </div>
+            <div className="result">
+              <p>Incorrect</p> <p>{incorrectAnswersAmount}</p>
+            </div>
+            <div className="home-button" onClick={() => navigate('/')}>
+              Home
+            </div>
+          </motion.div>
+          <SideInfos>
+            <p className="timer">60</p>
+          </SideInfos>
+        </Header>
         <Question
           content={questions[currentQuestion]?.content}
           alternatives={questions[currentQuestion]?.alternatives}

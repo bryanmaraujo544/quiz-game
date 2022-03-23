@@ -9,13 +9,14 @@ export const QuestionBoard = styled.div`
   flex-direction: column;
   height: 100%;
   align-items: center;
+  padding: 0 2.4rem;
 
   .result-board {
     position: relative;
     display: flex;
-    gap: 2rem;
+    gap: 3rem;
     justify-content: center;
-    padding: 2rem;
+    padding: 2.4rem;
     padding-bottom: 3.2rem;
     background-color: #4cc9f0;
     width: 100%;
@@ -56,5 +57,32 @@ export const QuestionBoard = styled.div`
         color: #4361ee;
       }
     }
+  }
+`;
+
+export const Header = styled.header`
+  display: flex;
+  align-items: center;
+  width: 100%;
+`;
+
+export const SideInfos = styled.div`
+  flex: 1;
+  min-height: 0.2rem;
+
+  &:nth-child(1) {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  &:nth-child(3) {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  p {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #3a0ca3;
   }
 `;

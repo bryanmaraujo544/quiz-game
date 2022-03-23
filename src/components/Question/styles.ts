@@ -11,14 +11,12 @@ interface AltProps {
 }
 
 export const Container = styled.div<Props>`
-  padding: 1.6rem;
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
 
   .question-container {
-    background: #fff;
     display: flex;
     justify-content: center;
     align-items: center;

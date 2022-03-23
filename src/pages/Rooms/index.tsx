@@ -48,17 +48,32 @@ const rooms = [
 export const Rooms = () => {
   const navigate = useNavigate();
 
+  function handleEnterRoom(room: any) {
+    const usernameInStorage = localStorage.getItem('username');
+
+    if (usernameInStorage) {
+      navigate(`room/${room.id}`);
+    } else {
+      navigate(`login/${room.id}`);
+    }
+  }
+
   return (
     <Container>
       <h1>Rooms</h1>
       <div className="rooms">
-        {rooms.map((room) => (
-          <Room className="room">
+        {rooms.map((room, i) => (
+          <Room className="room" isFull={i === 1}>
             <p className="room-title">{room.title}</p>
             <div className="img-container">
               <img src={room.photo_url} alt="" />
+              <p className="people-amount">
+                2/<strong>10</strong>
+              </p>
             </div>
-            <button onClick={() => navigate(`room/${room.id}`)}>Entrar</button>
+            <button onClick={() => handleEnterRoom(room)} disabled={i === 1}>
+              Entrar
+            </button>
           </Room>
         ))}
       </div>

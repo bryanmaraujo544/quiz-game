@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface RoomProps {
+  isFull: boolean;
+}
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -20,7 +24,7 @@ export const Container = styled.div`
   }
 `;
 
-export const Room = styled.div`
+export const Room = styled.div<RoomProps>`
   display: flex;
   gap: 3.2rem;
   flex: 1;
@@ -31,38 +35,55 @@ export const Room = styled.div`
   padding: 3.2rem;
   border-radius: 1.6rem;
 
-  .img-container {
-    background: #4361ee;
-    width: 12.8rem;
-    height: 12.8rem;
-    border-radius: 1.6rem;
-  }
-  img {
-    width: 100%;
-    height: 100%;
-    opacity: 0.5;
-    border-radius: 1.6rem;
-  }
-
   .room-title {
     font-size: 2.2rem;
     font-weight: 700;
     color: #4361ee;
   }
 
+  .img-container {
+    position: relative;
+    background: #4361ee;
+    width: 100%;
+    height: 12.8rem;
+    border-radius: 1.6rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+      opacity: 0.5;
+      border-radius: 1.6rem;
+      object-fit: cover;
+    }
+  }
+
+  .people-amount {
+    position: absolute;
+    left: 50%;
+    bottom: -1.2rem;
+    transform: translateX(-50%);
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: #fff;
+    color: ${({ isFull }) => (isFull ? '#6C757D' : '#4361ee')};
+
+    padding: 0.4rem 1.6rem;
+    border-radius: 99rem;
+  }
+
   button {
     border: 0;
-    background: #4361ee;
+    background: ${({ isFull }) => (isFull ? '#ccc' : '#4361ee')};
     padding: 1.2rem 3.2rem;
     border-radius: 99rem;
     font-size: 2rem;
     font-weight: 700;
     color: #fff;
-    cursor: pointer;
+    cursor: ${({ isFull }) => (isFull ? 'not-allowed' : 'pointer')};
     transition: background 0.2s ease;
 
     &:hover {
-      background: #4cc9f0;
+      background: ${({ isFull }) => (isFull ? '#ccc' : '#4cc9f0')};
     }
   }
 `;

@@ -35,7 +35,7 @@ export const Question = ({
         y: 0,
         opacity: 1,
         transition: {
-          duration: 0.25,
+          duration: 0.35,
         },
       });
       questionControls.start({
@@ -55,11 +55,11 @@ export const Question = ({
 
   async function handleConfirmAnswer() {
     const isCorrect = answerChosen === correctAnswer;
-    console.log({ isCorrect });
     await questionControls.start({
       y: -150,
       opacity: 0,
     });
+
     questionControls.start({
       y: 0,
       opacity: 1,
@@ -80,8 +80,8 @@ export const Question = ({
     } else {
       setIncorrectAnswersAmount((prevAmount: number) => (prevAmount += 1));
     }
-
     setIsModalOpen(false);
+
     handlePassToNextQuestion();
   }
 
@@ -98,6 +98,7 @@ export const Question = ({
       <motion.div className="alternatives">
         {alternatives?.map((alternative) => (
           <Alternative
+            key={alternative.replace(' ', '')}
             className="alternative"
             onClick={() => handleAnswerQuestion(alternative)}
           >
