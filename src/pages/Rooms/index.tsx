@@ -1,4 +1,6 @@
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { InfosContext } from '../../contexts/InfosContext';
 import { Container, Room } from './styles';
 
 const rooms = [
@@ -47,12 +49,17 @@ const rooms = [
 
 export const Rooms = () => {
   const navigate = useNavigate();
+  const { socket } = useContext(InfosContext);
 
   function handleEnterRoom(room: any) {
     const usernameInStorage = localStorage.getItem('username');
 
     if (usernameInStorage) {
       navigate(`room/${room.id}`);
+      socket.emit('join_room', {
+        roomId: room.id,
+        username: usernameInStorage,
+      });
     } else {
       navigate(`login/${room.id}`);
     }

@@ -9,7 +9,7 @@ interface Props {
   handlePassToNextQuestion: any;
   setCorrectAnswersAmount: any;
   setIncorrectAnswersAmount: any;
-  resultControls: any;
+  controls: any;
 }
 
 export const Question = ({
@@ -19,19 +19,16 @@ export const Question = ({
   setCorrectAnswersAmount,
   setIncorrectAnswersAmount,
   handlePassToNextQuestion,
-  resultControls,
+  controls,
 }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
   const [answerChosen, setAnswerChosen] = useState('');
 
-  const alternativesControls = useAnimation();
-  const contentControls = useAnimation();
   const questionControls = useAnimation();
 
   useEffect(() => {
     (async () => {
-      await resultControls.start({
+      await controls.result.start({
         y: 0,
         opacity: 1,
         transition: {
@@ -66,26 +63,30 @@ export const Question = ({
       transition: { duration: 0.25 },
     });
 
-    await resultControls.start({
+    await controls.result.start({
       y: -200,
       opacity: 0,
       transition: { duration: 0.1 },
     });
 
-    resultControls.start({
+    await controls.result.start({
       y: 0,
       opacity: 1,
       transition: { duration: 0.25 },
     });
 
-    if (isCorrect) {
-      // TODO: handle to pass
-      setCorrectAnswersAmount((prevAmount: number) => (prevAmount += 1));
-    } else {
-      setIncorrectAnswersAmount((prevAmount: number) => (prevAmount += 1));
-    }
     setIsModalOpen(false);
     handlePassToNextQuestion();
+
+    if (isCorrect) {
+      setCorrectAnswersAmount((prevAmount: number) => (prevAmount += 1));
+      await controls.correct.start({ scale: 1.2 });
+      controls.correct.start({ scale: 1 });
+    } else {
+      setIncorrectAnswersAmount((prevAmount: number) => (prevAmount += 1));
+      await controls.incorrect.start({ scale: 1.2 });
+      controls.incorrect.start({ scale: 1 });
+    }
   }
 
   return (

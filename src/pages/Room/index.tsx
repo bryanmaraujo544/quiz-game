@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Container, QuestionBoard, Header, SideInfos } from './styles';
 import { Question } from '../../components/Question';
 import { Modal } from '../../components/Modal';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
 import { ResultModal } from './ResultModal';
+import { InfosContext } from '../../contexts/InfosContext';
 
 const rooms = [
   {
@@ -47,17 +48,24 @@ const rooms = [
 ];
 
 export const Room = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+
   const [correctAnswersAmount, setCorrectAnswersAmount] = useState(0);
   const [incorrectAnswersAmount, setIncorrectAnswersAmount] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [questions, setQuestions] = useState([] as any);
-  console.log({ questions });
+
+  const [peopleAmount, setPeopleAmount] = useState(0);
+  const [counter, setCounter] = useState(10);
 
   const { roomId } = useParams();
+  const { socket } = useContext(InfosContext);
+  const intervalRef = useRef(0);
   const navigate = useNavigate();
 
-  const resultControls = useAnimation();
+  const result = useAnimation();
+  const correct = useAnimation();
+  const incorrect = useAnimation();
 
   useEffect(() => {
     const questionsOfRoom = rooms.find((room) => room.id === Number(roomId))
@@ -65,14 +73,44 @@ export const Room = () => {
 
     console.log({ questionsOfRoom });
     setQuestions(questionsOfRoom);
+
+    // handleStartQuiz();
   }, []);
+
+  useEffect(() => {
+    if (counter === 0) {
+      clearInterval(intervalRef.current);
+      setIsResultModalOpen(true);
+    }
+  }, [counter]);
+
+  useEffect(() => {
+    socket.on('person_entered_in_room', (data: any) => {
+      console.log({ data });
+      setPeopleAmount((prevAmount) => (prevAmount += 1));
+    });
+  }, [socket]);
+
+  function handleStartQuiz() {
+    const interval = setInterval(() => {
+      console.log('interval runnign');
+      setCounter((prev) => {
+        if (prev > 0) {
+          return (prev -= 1);
+        }
+        return prev;
+      });
+    }, 1000);
+
+    intervalRef.current = interval;
+  }
 
   function handlePassToNextQuestion() {
     if (currentQuestion < questions?.length - 1) {
       setCurrentQuestion((prevCurrent) => (prevCurrent += 1));
     } else {
       // End of the quiz
-      setIsModalOpen(true);
+      setIsResultModalOpen(true);
     }
   }
 
@@ -80,7 +118,7 @@ export const Room = () => {
     setCorrectAnswersAmount(0);
     setIncorrectAnswersAmount(0);
     setCurrentQuestion(0);
-    setIsModalOpen(false);
+    setIsResultModalOpen(false);
   }
 
   if (questions.length < 0) {
@@ -92,25 +130,25 @@ export const Room = () => {
       <QuestionBoard>
         <Header>
           <SideInfos>
-            <p className="people-progress">12/50</p>
+            <p className="people-progress">{peopleAmount}/10</p>
           </SideInfos>
           <motion.div
             className="result-board"
-            animate={resultControls}
+            animate={result}
             initial={{ y: -100, opacity: 0 }}
           >
-            <div className="result">
+            <motion.div className="result" animate={correct}>
               <p>Correct</p> <p>{correctAnswersAmount}</p>
-            </div>
-            <div className="result">
+            </motion.div>
+            <motion.div className="result" animate={incorrect}>
               <p>Incorrect</p> <p>{incorrectAnswersAmount}</p>
-            </div>
+            </motion.div>
             <div className="home-button" onClick={() => navigate('/')}>
               Home
             </div>
           </motion.div>
           <SideInfos>
-            <p className="timer">60</p>
+            <p className="timer">{counter}</p>
           </SideInfos>
         </Header>
         <Question
@@ -120,12 +158,12 @@ export const Room = () => {
           handlePassToNextQuestion={handlePassToNextQuestion}
           setCorrectAnswersAmount={setCorrectAnswersAmount}
           setIncorrectAnswersAmount={setIncorrectAnswersAmount}
-          resultControls={resultControls}
+          controls={{ result, correct, incorrect } as any}
         />
       </QuestionBoard>
       <ResultModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isResultModalOpen}
+        setIsModalOpen={setIsResultModalOpen}
         correctAnswersAmount={correctAnswersAmount}
         incorrectAnswersAmount={incorrectAnswersAmount}
         handleRestartQuiz={handleRestartQuiz}

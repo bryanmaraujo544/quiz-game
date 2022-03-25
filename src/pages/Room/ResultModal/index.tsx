@@ -26,19 +26,29 @@ export const ResultModal = ({
 
   return (
     <Modal
-      title="These are your results"
+      title="Results"
       isModalOpen={isModalOpen}
       setIsModalOpen={setIsModalOpen}
     >
       <ResultBoard>
         <div className="result-board">
-          <div className="result">
-            <p>Correct</p> <p>{correctAnswersAmount}</p>
-          </div>
-          <div className="result">
-            <p>Incorrect</p> <p>{incorrectAnswersAmount}</p>
+          <h3 className="title">Your results</h3>
+          <div className="results">
+            <div className="result">
+              <p>Correct</p> <p>{correctAnswersAmount}</p>
+            </div>
+            <div className="result">
+              <p>Incorrect</p> <p>{incorrectAnswersAmount}</p>
+            </div>
           </div>
         </div>
+        <div className="ranking">
+          <h3 className="title">Ranking</h3>
+          {new Array(10).fill('bryan').map((name) => (
+            <p className="user">{name}</p>
+          ))}
+        </div>
+
         <button
           type="button"
           className="reset-btn"

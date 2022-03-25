@@ -26,6 +26,8 @@ export const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-height: 100vh;
+  overflow: hidden;
 
   .header {
     display: flex;
