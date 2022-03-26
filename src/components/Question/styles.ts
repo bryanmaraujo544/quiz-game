@@ -48,6 +48,7 @@ export const Alternative = styled.div<AltProps>`
   align-items: center;
   font-weight: 700;
   background: #f72585;
+  text-align: center;
 
   &:hover {
     background: #4cc9f0;

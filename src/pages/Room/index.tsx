@@ -6,46 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
 import { ResultModal } from './ResultModal';
 import { InfosContext } from '../../contexts/InfosContext';
-
-const rooms = [
-  {
-    id: 10,
-    title: 'Football Questions',
-    questions: [
-      {
-        content: 'Quem ganhou a copa de 2018?',
-        alternatives: ['Brasil', 'Alemanha', 'Espanha', 'França'],
-        correctAnswer: 'França',
-      },
-      {
-        content: 'Quem ganhou a copa de 2010?',
-        alternatives: ['Itálica', 'Argentina', 'Espanha', 'Gana'],
-        correctAnswer: 'Espanha',
-      },
-      {
-        content: 'Qual linguagem é a "evolução" do JavaScript',
-        alternatives: ['Ruby', 'TypeScript', 'PHP', 'CoffeScript'],
-        correctAnswer: 'TypeScript',
-      },
-    ],
-  },
-  {
-    id: 20,
-    title: 'Trap Questions',
-    questions: [
-      {
-        content: 'Qual o nome do único album do Matuê?',
-        alternatives: ['É Sal', 'Astroworld', 'Máquina do Tempo', '777-666'],
-        correctAnswer: 'Máquina do Tempo',
-      },
-      {
-        content: 'Qual destas músicas é do Kyan',
-        alternatives: ['Oi, como cê tá', 'Trap de gringo', 'É sal', 'Anos-luz'],
-        correctAnswer: 'Trap de gringo',
-      },
-    ],
-  },
-];
+import RoomService from '../../services/RoomService';
 
 export const Room = () => {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
@@ -67,14 +28,21 @@ export const Room = () => {
   const correct = useAnimation();
   const incorrect = useAnimation();
 
+  console.log({ questions });
+
   useEffect(() => {
-    const questionsOfRoom = rooms.find((room) => room.id === Number(roomId))
-      ?.questions as any;
+    // const questionsOfRoom = rooms.find((room) => room.id === Number(roomId))
+    //   ?.questions as any;
+    (async () => {
+      const { data: questionsOfRoom } = await RoomService.listQuestions(
+        Number(roomId)
+      );
 
-    console.log({ questionsOfRoom });
-    setQuestions(questionsOfRoom);
+      console.log({ questionsOfRoom });
+      setQuestions(questionsOfRoom);
 
-    // handleStartQuiz();
+      // handleStartQuiz();
+    })();
   }, []);
 
   useEffect(() => {
@@ -154,7 +122,7 @@ export const Room = () => {
         <Question
           content={questions[currentQuestion]?.content}
           alternatives={questions[currentQuestion]?.alternatives}
-          correctAnswer={questions[currentQuestion]?.correctAnswer}
+          correctAnswer={questions[currentQuestion]?.correct_answer}
           handlePassToNextQuestion={handlePassToNextQuestion}
           setCorrectAnswersAmount={setCorrectAnswersAmount}
           setIncorrectAnswersAmount={setIncorrectAnswersAmount}

@@ -39,6 +39,7 @@ export const Room = styled.div<RoomProps>`
     font-size: 2.2rem;
     font-weight: 700;
     color: #4361ee;
+    text-align: center;
   }
 
   .img-container {

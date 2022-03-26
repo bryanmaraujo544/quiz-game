@@ -100,13 +100,13 @@ export const Question = ({
         <p className="question">{content}</p>
       </motion.div>
       <motion.div className="alternatives">
-        {alternatives?.map((alternative) => (
+        {alternatives?.map(({ id, content }: any) => (
           <Alternative
-            key={alternative.replace(' ', '')}
+            key={id}
             className="alternative"
-            onClick={() => handleAnswerQuestion(alternative)}
+            onClick={() => handleAnswerQuestion(content)}
           >
-            {alternative}
+            {content}
           </Alternative>
         ))}
       </motion.div>
