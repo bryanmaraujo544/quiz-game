@@ -17,12 +17,13 @@ export const Login = () => {
 
     try {
       if (!username) {
-        window.alert('please, type something');
-        return;
+        return window.alert('please, type something');
       }
 
       const { data } = await LoginService.checkUsername(username);
-      if (!data.isAuthorized) return;
+      if (!data.isAuthorized) {
+        return window.alert('This user name already is in use');
+      }
 
       localStorage.setItem('username', username);
       setUser({ username });
@@ -31,17 +32,41 @@ export const Login = () => {
         roomId: Number(roomId),
       });
 
-      const { participantCreated } = await RoomService.createParticipant({
-        username,
-        gameroomId: gameroom.id,
-      });
+      if (!gameroom) {
+        // When some user enter in the room and he is the first to enter, any gameroom is opened
+        // with that room, so the first user is "responsible" to create the gameroom
+        const { gameroomCreated } = await RoomService.createGameroom({
+          roomId: Number(roomId),
+        });
 
-      socket.emit('join_room', {
-        roomId,
-        username,
-      });
+        const { participantCreated } = await RoomService.createParticipant({
+          username: username,
+          gameroomId: gameroomCreated.id,
+        });
+
+        if (participantCreated) {
+          socket.emit('join_room', {
+            roomId: roomId,
+            username: username,
+          });
+        }
+      }
+      {
+        // If there is some gameroom opened with that room we add the user as participant of that
+        const { participantCreated } = await RoomService.createParticipant({
+          username: username,
+          gameroomId: gameroom.id,
+        });
+
+        if (participantCreated) {
+          socket.emit('join_room', {
+            roomId: roomId,
+            username: username,
+          });
+        }
+      }
+
       navigate(`/room/${roomId}`);
-      console.log({ participantCreated });
     } catch (error: any) {
       return window.alert(error.response.data.message);
     }

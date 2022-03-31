@@ -1,6 +1,14 @@
 import { Container } from './styles';
 import GlobalStyles from '../../styles/global';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  useHref,
+} from 'react-router-dom';
+import { StyledToastContainer } from '../StyledToastContainer';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { Rooms } from '../../pages/Rooms';
 import { Room } from '../../pages/Room';
@@ -10,6 +18,13 @@ import { InfosContextProvider } from '../../contexts/InfosContext';
 function App() {
   return (
     <>
+      <StyledToastContainer
+        autoClose={2000}
+        pauseOnHover={false}
+        draggable
+        closeOnClick={false}
+        position="top-center"
+      />
       <GlobalStyles />
       <Container>
         <InfosContextProvider>

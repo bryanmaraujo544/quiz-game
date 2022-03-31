@@ -6,12 +6,13 @@ import { motion, useAnimation } from 'framer-motion';
 import { ResultModal } from './ResultModal';
 import { InfosContext } from '../../contexts/InfosContext';
 import RoomService from '../../services/RoomService';
+import { toast } from 'react-toastify';
 
 export const Room = () => {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
   const [questions, setQuestions] = useState([] as any);
-  const [gameroom, setGameroom] = useState({} as any);
-
+  const [gameroom, setGameroom] = useState(null || ({} as any));
+  console.log({ gameroom });
   const [correctAnswersAmount, setCorrectAnswersAmount] = useState(0);
   const [incorrectAnswersAmount, setIncorrectAnswersAmount] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -29,21 +30,29 @@ export const Room = () => {
   const incorrect = useAnimation();
 
   useEffect(() => {
-    socket.on('entered_room', (data: any) => {
-      console.log('Entered Room', data);
-    });
     socket.on('person_entered_in_room', (data: any) => {
       console.log('PERSON ENTERED IN ROOM');
-      // console.log({ data });
-      // console.log('people-amount', data.participantsAmount);
+      console.log(data.participantsAmount);
       setPeopleAmount(data.participantsAmount);
     });
+
+    socket.on(
+      'participant_left_this_room',
+      (data: { username: string; gameroomId: string }) => {
+        // toast(
+        //   `the user with the username: ${data.username} left the gameroom with id: ${data.gameroomId}`
+        // );
+        // window.console.log(
+        //   `the user with the username: ${data.username} left the gameroom with id: ${data.gameroomId}`
+        // );
+      }
+    );
   }, [socket]);
 
   useEffect(() => {
+    const username = localStorage.getItem('username') as any;
     (async () => {
       try {
-        const username = localStorage.getItem('username') as any;
         const questionsOfRoom = await RoomService.listQuestions(Number(roomId));
         setQuestions(questionsOfRoom);
 
@@ -53,24 +62,7 @@ export const Room = () => {
         });
         setGameroom(gameroom);
         setPeopleAmount(gameroom.participants.length);
-
-        // const { participantCreated } = await RoomService.createParticipant({
-        //   username,
-        //   gameroomId: gameroom.id,
-        // });
-        if (gameroom) return;
-
-        // If there is no gameroom opened with this room the first user create it automatically
-        const { gameroomCreated } = await RoomService.createGameroom({
-          roomId: Number(roomId),
-        });
-        // const { participantCreated: firstParticipantCreated } =
-        //   await RoomService.createParticipant({
-        //     username,
-        //     gameroomId: gameroomCreated.id,
-        //   });
-        setGameroom(gameroomCreated);
-        setPeopleAmount(gameroomCreated.participants.length);
+        // }
       } catch (error: any) {
         console.log(error.response.data);
       }
@@ -79,22 +71,25 @@ export const Room = () => {
     })();
   }, []);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       console.log({ participantCreated });
-  //     } catch (error: any) {
-  //       console.log(error.response.data.message);
-  //     }
-  //   })();
-  // }, [gameroom]);
-
   useEffect(() => {
     if (counter === 0) {
       clearInterval(intervalRef.current);
       setIsResultModalOpen(true);
     }
   }, [counter]);
+
+  useEffect(() => {
+    const username = localStorage.getItem('username') as any;
+
+    return () => {
+      if (gameroom?.id) {
+        socket.emit('participant_left_room', {
+          username,
+          gameroomId: gameroom?.id,
+        });
+      }
+    };
+  }, [gameroom]);
 
   function handleStartQuiz() {
     const interval = setInterval(() => {
@@ -106,7 +101,6 @@ export const Room = () => {
         return prev;
       });
     }, 1000);
-
     intervalRef.current = interval;
   }
 

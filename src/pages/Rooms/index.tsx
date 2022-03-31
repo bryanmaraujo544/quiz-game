@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { InfosContext } from '../../contexts/InfosContext';
 import RoomService from '../../services/RoomService';
 import RoomsService from '../../services/RoomsService';
@@ -34,18 +34,41 @@ export const Rooms = () => {
         const gameroom = await RoomService.getGameroomOfRoom({
           roomId: Number(room.id),
         });
-        navigate(`room/${room.id}`);
 
-        socket.emit('join_room', {
-          roomId: room.id,
-          username: usernameInStorage,
-        });
+        if (!gameroom) {
+          // When some user enter in the room and he is the first to enter, any gameroom is opened
+          // with that room, so the first user is "responsible" to create the gameroom
+          const { gameroomCreated } = await RoomService.createGameroom({
+            roomId: Number(room.id),
+          });
 
+          const { participantCreated } = await RoomService.createParticipant({
+            username: usernameInStorage,
+            gameroomId: gameroomCreated.id,
+          });
+
+          if (participantCreated) {
+            socket.emit('join_room', {
+              roomId: room.id,
+              username: usernameInStorage,
+            });
+          }
+        }
+
+        // If there is some gameroom opened with that room we add the user as participant of that
         const { participantCreated } = await RoomService.createParticipant({
           username: usernameInStorage,
           gameroomId: gameroom.id,
         });
-        console.log({ participantCreated });
+
+        if (participantCreated) {
+          socket.emit('join_room', {
+            roomId: room.id,
+            username: usernameInStorage,
+          });
+        }
+
+        navigate(`room/${room.id}`);
       } else {
         navigate(`login/${room.id}`);
       }

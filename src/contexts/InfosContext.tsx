@@ -18,10 +18,7 @@ const socket = io('http://localhost:5000');
 
 export const InfosContextProvider = ({ children }: any) => {
   const [user, setUser] = useState({} as User | {});
-  socket.emit('enter', { enter: 'enter' });
-  socket.on('everyone', (data) => {
-    console.log('everyone', data);
-  });
+
   return (
     <InfosContext.Provider value={{ user, setUser, socket }}>
       {children}
