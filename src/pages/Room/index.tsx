@@ -1,7 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Container, QuestionBoard, Header, SideInfos } from './styles';
 import { Question } from '../../components/Question';
-import { Modal } from '../../components/Modal';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
 import { ResultModal } from './ResultModal';
@@ -10,11 +9,12 @@ import RoomService from '../../services/RoomService';
 
 export const Room = () => {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+  const [questions, setQuestions] = useState([] as any);
+  const [gameroom, setGameroom] = useState({} as any);
 
   const [correctAnswersAmount, setCorrectAnswersAmount] = useState(0);
   const [incorrectAnswersAmount, setIncorrectAnswersAmount] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [questions, setQuestions] = useState([] as any);
 
   const [peopleAmount, setPeopleAmount] = useState(0);
   const [counter, setCounter] = useState(10);
@@ -28,22 +28,66 @@ export const Room = () => {
   const correct = useAnimation();
   const incorrect = useAnimation();
 
-  console.log({ questions });
+  useEffect(() => {
+    socket.on('entered_room', (data: any) => {
+      console.log('Entered Room', data);
+    });
+    socket.on('person_entered_in_room', (data: any) => {
+      console.log('PERSON ENTERED IN ROOM');
+      // console.log({ data });
+      // console.log('people-amount', data.participantsAmount);
+      setPeopleAmount(data.participantsAmount);
+    });
+  }, [socket]);
 
   useEffect(() => {
-    // const questionsOfRoom = rooms.find((room) => room.id === Number(roomId))
-    //   ?.questions as any;
     (async () => {
-      const { data: questionsOfRoom } = await RoomService.listQuestions(
-        Number(roomId)
-      );
+      try {
+        const username = localStorage.getItem('username') as any;
+        const questionsOfRoom = await RoomService.listQuestions(Number(roomId));
+        setQuestions(questionsOfRoom);
 
-      console.log({ questionsOfRoom });
-      setQuestions(questionsOfRoom);
+        // If there is a gameroom already opened with this roomId we get it
+        const gameroom = await RoomService.getGameroomOfRoom({
+          roomId: Number(roomId),
+        });
+        setGameroom(gameroom);
+        setPeopleAmount(gameroom.participants.length);
+
+        // const { participantCreated } = await RoomService.createParticipant({
+        //   username,
+        //   gameroomId: gameroom.id,
+        // });
+        if (gameroom) return;
+
+        // If there is no gameroom opened with this room the first user create it automatically
+        const { gameroomCreated } = await RoomService.createGameroom({
+          roomId: Number(roomId),
+        });
+        // const { participantCreated: firstParticipantCreated } =
+        //   await RoomService.createParticipant({
+        //     username,
+        //     gameroomId: gameroomCreated.id,
+        //   });
+        setGameroom(gameroomCreated);
+        setPeopleAmount(gameroomCreated.participants.length);
+      } catch (error: any) {
+        console.log(error.response.data);
+      }
 
       // handleStartQuiz();
     })();
   }, []);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       console.log({ participantCreated });
+  //     } catch (error: any) {
+  //       console.log(error.response.data.message);
+  //     }
+  //   })();
+  // }, [gameroom]);
 
   useEffect(() => {
     if (counter === 0) {
@@ -51,13 +95,6 @@ export const Room = () => {
       setIsResultModalOpen(true);
     }
   }, [counter]);
-
-  useEffect(() => {
-    socket.on('person_entered_in_room', (data: any) => {
-      console.log({ data });
-      setPeopleAmount((prevAmount) => (prevAmount += 1));
-    });
-  }, [socket]);
 
   function handleStartQuiz() {
     const interval = setInterval(() => {

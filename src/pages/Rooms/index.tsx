@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { InfosContext } from '../../contexts/InfosContext';
+import RoomService from '../../services/RoomService';
 import RoomsService from '../../services/RoomsService';
 import { Container, Room } from './styles';
 
@@ -17,22 +18,39 @@ export const Rooms = () => {
 
   useEffect(() => {
     (async () => {
-      const { data: allRooms } = await RoomsService.listAllRooms();
-      setAllRooms(allRooms);
+      try {
+        const { data: allRooms } = await RoomsService.listAllRooms();
+        setAllRooms(allRooms);
+      } catch (error: any) {
+        console.log(error);
+      }
     })();
   }, []);
 
-  function handleEnterRoom(room: any) {
+  async function handleEnterRoom(room: any) {
     const usernameInStorage = localStorage.getItem('username');
+    try {
+      if (usernameInStorage) {
+        const gameroom = await RoomService.getGameroomOfRoom({
+          roomId: Number(room.id),
+        });
+        navigate(`room/${room.id}`);
 
-    if (usernameInStorage) {
-      navigate(`room/${room.id}`);
-      socket.emit('join_room', {
-        roomId: room.id,
-        username: usernameInStorage,
-      });
-    } else {
-      navigate(`login/${room.id}`);
+        socket.emit('join_room', {
+          roomId: room.id,
+          username: usernameInStorage,
+        });
+
+        const { participantCreated } = await RoomService.createParticipant({
+          username: usernameInStorage,
+          gameroomId: gameroom.id,
+        });
+        console.log({ participantCreated });
+      } else {
+        navigate(`login/${room.id}`);
+      }
+    } catch {
+      // console.log('The participant already ')
     }
   }
 

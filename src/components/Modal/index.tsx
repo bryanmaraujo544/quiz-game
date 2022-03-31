@@ -48,8 +48,6 @@ export const Modal = ({
   isModalOpen,
   setIsModalOpen,
 }: Props) => {
-  console.log('oi');
-
   const overlayControls = useAnimation();
   const modalControls = useAnimation();
 
