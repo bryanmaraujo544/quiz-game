@@ -24,6 +24,7 @@ function App() {
         draggable
         closeOnClick={false}
         position="top-center"
+        limit={1}
       />
       <GlobalStyles />
       <Container>

@@ -18,11 +18,12 @@ export const StyledToastContainer = styled(ToastContainer).attrs({
 
   /* .toast is passed to toastClassName */
   .toast {
-    background-color: #fff;
+    background-color: #4361ee;
     border-radius: 4px;
     min-height: 4.2rem;
     padding: 0.8rem;
     box-shadow: 0 0.1rem 0.3rem #00000005;
+    color: #fff;
   }
 
   button[aria-label='close'] {
@@ -40,9 +41,9 @@ export const StyledToastContainer = styled(ToastContainer).attrs({
   .body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
-    font-weight: 500;
-    font-size: 1.4rem;
-    padding: 0.3rem;
+    font-weight: 600;
+    font-size: 1.6rem;
+    padding: 0.4rem;
   }
 
   /* .progress is passed to progressClassName */

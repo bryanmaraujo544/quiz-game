@@ -12,7 +12,6 @@ export const Room = () => {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
   const [questions, setQuestions] = useState([] as any);
   const [gameroom, setGameroom] = useState(null || ({} as any));
-  console.log({ gameroom });
   const [correctAnswersAmount, setCorrectAnswersAmount] = useState(0);
   const [incorrectAnswersAmount, setIncorrectAnswersAmount] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -38,13 +37,17 @@ export const Room = () => {
 
     socket.on(
       'participant_left_this_room',
-      (data: { username: string; gameroomId: string }) => {
-        // toast(
-        //   `the user with the username: ${data.username} left the gameroom with id: ${data.gameroomId}`
-        // );
-        // window.console.log(
-        //   `the user with the username: ${data.username} left the gameroom with id: ${data.gameroomId}`
-        // );
+      (data: {
+        username: string;
+        gameroomId: string;
+        participantsAmount: number;
+      }) => {
+        setPeopleAmount(data.participantsAmount);
+        // console.log(`THE ${data.username} LEFT THE ROOM`);
+        toast(`${data.username} left the room`, {
+          autoClose: 1000,
+          position: 'bottom-left',
+        });
       }
     );
   }, [socket]);
