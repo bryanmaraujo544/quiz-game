@@ -7,8 +7,8 @@ class RoomsService {
     this.httpClient = axios('http://localhost:5000');
   }
 
-  async listAllRooms() {
-    return this.httpClient.get('/rooms');
+  async listAllGamerooms() {
+    return this.httpClient.get('/gamerooms');
   }
 }
 

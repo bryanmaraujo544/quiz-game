@@ -7,6 +7,7 @@ import { ResultModal } from './ResultModal';
 import { InfosContext } from '../../contexts/InfosContext';
 import RoomService from '../../services/RoomService';
 import { toast } from 'react-toastify';
+import { StyledToastContainer } from '../../components/StyledToastContainer';
 
 export const Room = () => {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
@@ -20,7 +21,7 @@ export const Room = () => {
   const [counter, setCounter] = useState(10);
 
   const { roomId } = useParams();
-  const { socket } = useContext(InfosContext);
+  const { socket, setAllRooms } = useContext(InfosContext);
   const intervalRef = useRef(0);
   const navigate = useNavigate();
 
@@ -31,8 +32,11 @@ export const Room = () => {
   useEffect(() => {
     socket.on('person_entered_in_room', (data: any) => {
       console.log('PERSON ENTERED IN ROOM');
-      console.log(data.participantsAmount);
       setPeopleAmount(data.participantsAmount);
+      toast(`${data.username} entered the room`, {
+        autoClose: 1000,
+        position: 'bottom-left',
+      });
     });
 
     socket.on(
@@ -43,13 +47,12 @@ export const Room = () => {
         participantsAmount: number;
       }) => {
         setPeopleAmount(data.participantsAmount);
-        // console.log(`THE ${data.username} LEFT THE ROOM`);
-        toast(`${data.username} left the room`, {
-          autoClose: 1000,
-          position: 'bottom-left',
-        });
       }
     );
+
+    // socket.on('quiz_started', (payload: any) => {
+    //   handleStartQuiz();
+    // });
   }, [socket]);
 
   useEffect(() => {
@@ -63,9 +66,15 @@ export const Room = () => {
         const gameroom = await RoomService.getGameroomOfRoom({
           roomId: Number(roomId),
         });
+
+        // Create participant in case the page is reload
+        await RoomService.createParticipant({
+          username: username,
+          gameroomId: gameroom.id,
+        });
+
         setGameroom(gameroom);
         setPeopleAmount(gameroom.participants.length);
-        // }
       } catch (error: any) {
         console.log(error.response.data);
       }
@@ -81,11 +90,28 @@ export const Room = () => {
     }
   }, [counter]);
 
+  // The purpose of this useEffect is emit and event to socket io when the room page is unmounted
+  // in other words, when the user gets out of the room
   useEffect(() => {
     const username = localStorage.getItem('username') as any;
 
     return () => {
       if (gameroom?.id) {
+        // Here I am taking out the participant that left the room in frontend to
+        // because I am emitting the socket event that delete the participant in server
+        // and in the same time grabbing the allRooms informations when I go to Rooms
+        // and probably the this time it's not enough to get update infos
+        setAllRooms((allRooms: any) => {
+          return allRooms.map((gameroom2: any) => {
+            if (gameroom2.id === gameroom.id) {
+              const participants = gameroom2.participants.filter(
+                (part: any) => part.username !== username
+              );
+
+              return { ...gameroom2, participants };
+            }
+          });
+        });
         socket.emit('participant_left_room', {
           username,
           gameroomId: gameroom?.id,
@@ -123,12 +149,26 @@ export const Room = () => {
     setIsResultModalOpen(false);
   }
 
+  function handleExitRoom() {
+    navigate('/');
+
+    // location.reload();
+  }
+
   if (questions.length < 0) {
     return <h1>loading</h1>;
   }
 
   return (
     <Container>
+      <StyledToastContainer
+        autoClose={2000}
+        pauseOnHover={false}
+        draggable
+        closeOnClick={false}
+        position="top-center"
+        enableMultiContainer={false}
+      />
       <QuestionBoard>
         <Header>
           <SideInfos>
@@ -145,7 +185,7 @@ export const Room = () => {
             <motion.div className="result" animate={incorrect}>
               <p>Incorrect</p> <p>{incorrectAnswersAmount}</p>
             </motion.div>
-            <div className="home-button" onClick={() => navigate('/')}>
+            <div className="home-button" onClick={() => handleExitRoom()}>
               Home
             </div>
           </motion.div>

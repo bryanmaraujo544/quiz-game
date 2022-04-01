@@ -18,14 +18,6 @@ import { InfosContextProvider } from '../../contexts/InfosContext';
 function App() {
   return (
     <>
-      <StyledToastContainer
-        autoClose={2000}
-        pauseOnHover={false}
-        draggable
-        closeOnClick={false}
-        position="top-center"
-        limit={1}
-      />
       <GlobalStyles />
       <Container>
         <InfosContextProvider>

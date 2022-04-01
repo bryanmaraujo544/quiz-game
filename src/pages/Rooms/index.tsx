@@ -11,16 +11,66 @@ interface Room {
   photo_url: string;
 }
 
+interface Participant {
+  id: number;
+  username: string;
+}
+
+interface Gameroom {
+  id: number;
+  room: Room;
+  participants: Participant[];
+}
+
 export const Rooms = () => {
   const navigate = useNavigate();
-  const [allRooms, setAllRooms] = useState([]);
-  const { socket } = useContext(InfosContext);
+  // const [allRooms, setAllRooms] = useState([] as Gameroom[]);
+  const { socket, allRooms, setAllRooms } = useContext(InfosContext);
+  console.log({ allRooms });
+
+  useEffect(() => {
+    socket.on('person_entered_in_room', (data: any) => {
+      console.log('some person entered the room', data);
+      setAllRooms((allRooms: any) => {
+        return allRooms.map((gameroom: any) => {
+          if (gameroom.id === data.gameroom.id) {
+            console.log('iguaaal');
+            return data.gameroom;
+          }
+          return gameroom;
+        });
+      });
+    });
+
+    socket.on(
+      'participant_left_this_room',
+      (data: {
+        username: string;
+        gameroomId: string;
+        gameroom: any;
+        participantsAmount: number;
+      }) => {
+        console.log('some participant left the room');
+        setAllRooms((allRooms: any) => {
+          return allRooms.map((gameroom: any) => {
+            if (gameroom.id === data.gameroom.id) {
+              console.log('iguaaal');
+              return data.gameroom;
+            }
+            return gameroom;
+          });
+        });
+      }
+    );
+  }, [socket]);
 
   useEffect(() => {
     (async () => {
       try {
-        const { data: allRooms } = await RoomsService.listAllRooms();
-        setAllRooms(allRooms);
+        if (allRooms.length === 0) {
+          const { data: rooms } = await RoomsService.listAllGamerooms();
+          setAllRooms(rooms);
+        }
       } catch (error: any) {
         console.log(error);
       }
@@ -42,10 +92,15 @@ export const Rooms = () => {
             roomId: Number(room.id),
           });
 
-          const { participantCreated } = await RoomService.createParticipant({
-            username: usernameInStorage,
-            gameroomId: gameroomCreated.id,
-          });
+          const { participantCreated, message } =
+            await RoomService.createParticipant({
+              username: usernameInStorage,
+              gameroomId: gameroomCreated.id,
+            });
+
+          if (!participantCreated) {
+            window.alert(message);
+          }
 
           if (participantCreated) {
             socket.emit('join_room', {
@@ -53,22 +108,27 @@ export const Rooms = () => {
               username: usernameInStorage,
             });
           }
+          return;
         }
 
         // If there is some gameroom opened with that room we add the user as participant of that
-        const { participantCreated } = await RoomService.createParticipant({
-          username: usernameInStorage,
-          gameroomId: gameroom.id,
-        });
+        const { participantCreated, message } =
+          await RoomService.createParticipant({
+            username: usernameInStorage,
+            gameroomId: gameroom.id,
+          });
+
+        if (!participantCreated) {
+          window.alert(message);
+        }
 
         if (participantCreated) {
           socket.emit('join_room', {
             roomId: room.id,
             username: usernameInStorage,
           });
+          navigate(`room/${room.id}`);
         }
-
-        navigate(`room/${room.id}`);
       } else {
         navigate(`login/${room.id}`);
       }
@@ -81,13 +141,13 @@ export const Rooms = () => {
     <Container>
       <h1>Rooms</h1>
       <div className="rooms">
-        {allRooms.map((room: Room, i) => (
-          <Room className="room" isFull={i === 1}>
+        {allRooms.map(({ id, room, participants }, i) => (
+          <Room className="room" isFull={i === 1} key={id}>
             <p className="room-title">{room.title}</p>
             <div className="img-container">
               <img src={room.photo_url} alt="" />
               <p className="people-amount">
-                2/<strong>10</strong>
+                {participants.length}/<strong>10</strong>
               </p>
             </div>
             <button onClick={() => handleEnterRoom(room)} disabled={i === 1}>

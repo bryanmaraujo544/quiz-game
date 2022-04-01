@@ -39,34 +39,42 @@ export const Login = () => {
           roomId: Number(roomId),
         });
 
-        const { participantCreated } = await RoomService.createParticipant({
-          username: username,
-          gameroomId: gameroomCreated.id,
-        });
+        const { participantCreated, message } =
+          await RoomService.createParticipant({
+            username: username,
+            gameroomId: gameroomCreated.id,
+          });
+
+        if (!participantCreated) {
+          window.alert(message);
+        }
 
         if (participantCreated) {
           socket.emit('join_room', {
             roomId: roomId,
             username: username,
           });
+          navigate(`/room/${roomId}`);
         }
-      }
-      {
+      } else {
         // If there is some gameroom opened with that room we add the user as participant of that
-        const { participantCreated } = await RoomService.createParticipant({
-          username: username,
-          gameroomId: gameroom.id,
-        });
+        const { participantCreated, message } =
+          await RoomService.createParticipant({
+            username: username,
+            gameroomId: gameroom.id,
+          });
 
+        if (!participantCreated) {
+          window.alert(message);
+        }
         if (participantCreated) {
           socket.emit('join_room', {
             roomId: roomId,
             username: username,
           });
+          navigate(`/room/${roomId}`);
         }
       }
-
-      navigate(`/room/${roomId}`);
     } catch (error: any) {
       return window.alert(error.response.data.message);
     }
