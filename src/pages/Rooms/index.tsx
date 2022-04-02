@@ -37,7 +37,6 @@ export const Rooms = () => {
           console.log('gameroom when entered', gameroom);
 
           if (gameroom?.id === data?.room?.gamerooms[0]?.id) {
-            console.log('EQUAL');
             return data.room;
           } else if (!gameroom) {
             return data.room;
@@ -140,7 +139,7 @@ export const Rooms = () => {
       <h1>Rooms</h1>
       <div className="rooms">
         {allRooms.map(({ id, title, photo_url, gamerooms }: any, i: number) => (
-          <Room className="room" isFull={i === 1} key={id}>
+          <Room className="room" isFull={i === 5} key={id}>
             <p className="room-title">{title}</p>
             <div className="img-container">
               <img src={photo_url} alt="" />
@@ -148,7 +147,7 @@ export const Rooms = () => {
                 {gamerooms[0]?.participants?.length || 0}/<strong>10</strong>
               </p>
             </div>
-            <button onClick={() => handleEnterRoom({ id })} disabled={i === 1}>
+            <button onClick={() => handleEnterRoom({ id })} disabled={i === 5}>
               Entrar
             </button>
           </Room>

@@ -115,7 +115,7 @@ export const Room = () => {
             const gameroom = room.gamerooms[0];
 
             if (gameroom?.id === gameroom?.id) {
-              const participants = gameroom?.participants.filter(
+              const participants = gameroom?.participants?.filter(
                 (part: any) => part.username !== username
               );
               console.log({ participants });

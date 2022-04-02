@@ -31,6 +31,7 @@ export const Room = styled.div<RoomProps>`
   max-width: 30rem;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   background: #fff;
   padding: 3.2rem;
   border-radius: 1.6rem;
@@ -40,6 +41,9 @@ export const Room = styled.div<RoomProps>`
     font-weight: 700;
     color: #4361ee;
     text-align: center;
+    display: flex;
+    align-items: center;
+    height: 4.2rem;
   }
 
   .img-container {
@@ -48,6 +52,7 @@ export const Room = styled.div<RoomProps>`
     width: 100%;
     height: 12.8rem;
     border-radius: 1.6rem;
+    /* flex: 1; */
 
     img {
       width: 100%;
