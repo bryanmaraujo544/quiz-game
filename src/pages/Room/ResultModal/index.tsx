@@ -1,6 +1,7 @@
 import { ResultBoard } from './styles';
 import { Modal } from '../../../components/Modal';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   isModalOpen: boolean;
@@ -17,18 +18,20 @@ export const ResultModal = ({
   incorrectAnswersAmount,
   handleRestartQuiz,
 }: Props) => {
-  console.log('result modal');
-  useEffect(() => {
-    if (!isModalOpen) {
-      handleRestartQuiz();
-    }
-  }, [isModalOpen]);
+  const navigate = useNavigate();
+
+  async function handleCloseModal() {
+    handleRestartQuiz();
+    setIsModalOpen(false);
+    navigate('/');
+  }
 
   return (
     <Modal
       title="Results"
       isModalOpen={isModalOpen}
-      setIsModalOpen={setIsModalOpen}
+      handleCloseModal={handleCloseModal}
+      delayToOpen={0.5}
     >
       <ResultBoard>
         <div className="result-board">
@@ -52,7 +55,7 @@ export const ResultModal = ({
         <button
           type="button"
           className="reset-btn"
-          onClick={() => handleRestartQuiz()}
+          onClick={() => handleCloseModal()}
         >
           Reset
         </button>

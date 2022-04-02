@@ -113,7 +113,7 @@ export const Question = ({
       <Modal
         title="Confirm you answer?"
         isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
+        handleCloseModal={() => setIsModalOpen(false)}
       >
         <div className="buttons">
           <button type="button" onClick={() => setIsModalOpen(false)}>

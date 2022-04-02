@@ -117,16 +117,16 @@ export const Rooms = () => {
             username: usernameInStorage,
             gameroomId: gameroom.id,
           });
+        console.log({ participantCreated, message });
 
-        if (!participantCreated) {
+        if (participantCreated === null) {
           window.alert(message);
-        }
-
-        if (participantCreated) {
+        } else {
           socket.emit('join_room', {
             roomId: room.id,
             username: usernameInStorage,
           });
+          console.log('ROOM ID', room.id);
           navigate(`room/${room.id}`);
         }
       } else {

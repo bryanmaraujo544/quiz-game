@@ -50,9 +50,14 @@ export const Room = () => {
       }
     );
 
-    // socket.on('quiz_started', (payload: any) => {
-    //   handleStartQuiz();
-    // });
+    socket.on('quiz_started', (payload: any) => {
+      console.log('COMEÇOOOOOOU');
+      handleStartQuiz();
+    });
+
+    socket.on('quiz_ended', (payload: any) => {
+      console.log('TERMINOOOOU');
+    });
   }, [socket]);
 
   useEffect(() => {
@@ -122,7 +127,6 @@ export const Room = () => {
 
   function handleStartQuiz() {
     const interval = setInterval(() => {
-      console.log('interval runnign');
       setCounter((prev) => {
         if (prev > 0) {
           return (prev -= 1);

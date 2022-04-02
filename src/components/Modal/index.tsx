@@ -9,10 +9,11 @@ interface Props {
   children: any;
   title: string;
   isModalOpen: any;
-  setIsModalOpen: any;
+  handleCloseModal: any;
+  delayToOpen?: number;
 }
 
-const overlayVariants = {
+const overlayVariants = (delay?: number) => ({
   hidden: {
     transition: {
       when: 'afterChildren',
@@ -23,13 +24,14 @@ const overlayVariants = {
   },
   show: {
     transition: {
+      delay: delay || 0,
       when: 'beforeChildren',
       duration: 0.1,
     },
     opacity: 1,
     display: 'flex',
   },
-};
+});
 
 const modalVariants = {
   hidden: {
@@ -46,7 +48,8 @@ export const Modal = ({
   children,
   title,
   isModalOpen,
-  setIsModalOpen,
+  handleCloseModal,
+  delayToOpen,
 }: Props) => {
   const overlayControls = useAnimation();
   const modalControls = useAnimation();
@@ -63,7 +66,7 @@ export const Modal = ({
     <Overlay
       isOpen={isModalOpen}
       as={motion.div}
-      variants={overlayVariants}
+      variants={overlayVariants(delayToOpen)}
       animate={overlayControls}
     >
       <ModalContainer as={motion.div} variants={modalVariants}>
@@ -71,7 +74,7 @@ export const Modal = ({
           <h3>{title}</h3>
           <AiOutlineCloseCircle
             className="icon"
-            onClick={() => setIsModalOpen(false)}
+            onClick={() => handleCloseModal()}
           />
         </div>
         <div className="body">{children}</div>
