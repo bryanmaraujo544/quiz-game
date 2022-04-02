@@ -26,7 +26,7 @@ interface CtxProps {
   user: User;
   setUser: any;
   socket: any;
-  allRooms: Gameroom[];
+  allRooms: any;
   setAllRooms: any;
 }
 
@@ -36,7 +36,7 @@ const socket = io('http://localhost:5000');
 
 export const InfosContextProvider = ({ children }: any) => {
   const [user, setUser] = useState({} as User | {});
-  const [allRooms, setAllRooms] = useState([] as Gameroom[]);
+  const [allRooms, setAllRooms] = useState([] as any);
   console.log('ALL ROOMS', allRooms);
 
   return (

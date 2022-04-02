@@ -32,8 +32,8 @@ export const Room = () => {
 
   useEffect(() => {
     socket.on('person_entered_in_room', (data: any) => {
-      console.log('PERSON ENTERED IN ROOM');
-      setPeopleAmount(data.participantsAmount);
+      console.log('PERSON ENTERED IN ROOM', data);
+      setPeopleAmount(data?.participantsAmount);
       toast(`${data.username} entered the room`, {
         autoClose: 1000,
         position: 'bottom-left',
@@ -103,19 +103,24 @@ export const Room = () => {
     const username = localStorage.getItem('username') as any;
 
     return () => {
+      console.log('SAIU');
       if (gameroom?.id) {
-        // Here I am taking out the participant that left the room in frontend to
+        // Here I am taking out the participant that left the room in frontend
         // because I am emitting the socket event that delete the participant in server
-        // and in the same time grabbing the allRooms informations when I go to Rooms
-        // and probably the this time it's not enough to get update infos
+        // and in the same time grabbing the allRooms informations in interface when I go to Rooms,
+        // so probably this time it's not enough to get updated infos
+
         setAllRooms((allRooms: any) => {
-          return allRooms.map((gameroom2: any) => {
-            if (gameroom2.id === gameroom.id) {
-              const participants = gameroom2.participants.filter(
+          return allRooms.map((room: any) => {
+            const gameroom = room.gamerooms[0];
+
+            if (gameroom?.id === gameroom?.id) {
+              const participants = gameroom?.participants.filter(
                 (part: any) => part.username !== username
               );
+              console.log({ participants });
 
-              return { ...gameroom2, participants };
+              return { ...room, gamerooms: [{ ...gameroom, participants }] };
             }
           });
         });
