@@ -1,7 +1,12 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+interface Props {
+  hasStarted: boolean;
+}
+
+export const Container = styled.div<Props>`
   height: 100vh;
+  filter: ${({ hasStarted }) => (hasStarted ? 'blur(0px)' : 'blur(10px)')};
 `;
 
 export const QuestionBoard = styled.div`
@@ -64,6 +69,7 @@ export const Header = styled.header`
   display: flex;
   align-items: center;
   width: 100%;
+  z-index: 99999;
 `;
 
 export const SideInfos = styled.div`
@@ -84,5 +90,46 @@ export const SideInfos = styled.div`
     font-size: 3rem;
     font-weight: 700;
     color: #3a0ca3;
+  }
+`;
+
+export const Blocker = styled.div<Props>`
+  display: ${({ hasStarted }) => (hasStarted ? 'none' : 'flex')};
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 3.2rem;
+  position: absolute;
+  width: 100vw;
+  height: 100%;
+  background: #00000099;
+  backdrop-filter: blur(10px);
+  padding: 2.4rem;
+  z-index: 9;
+
+  p {
+    color: #fff;
+    font-size: 3.2rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  button {
+    background: #000;
+    color: #fff;
+    width: 100%;
+    max-width: 20rem;
+    height: 4.8rem;
+    border: 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+    border-radius: 1.2rem;
+    cursor: pointer;
+    transition: all 0.25s linear;
+
+    &:hover {
+      background: #fff;
+      color: #000;
+    }
   }
 `;

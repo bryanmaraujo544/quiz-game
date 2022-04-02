@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { Container, QuestionBoard, Header, SideInfos } from './styles';
+import { Container, QuestionBoard, Header, SideInfos, Blocker } from './styles';
 import { Question } from '../../components/Question';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
@@ -17,13 +17,14 @@ export const Room = () => {
   const [incorrectAnswersAmount, setIncorrectAnswersAmount] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
+  const [hasStarted, setHasStarted] = useState(false);
   const [peopleAmount, setPeopleAmount] = useState(0);
-  const [counter, setCounter] = useState(10);
+  const [counter, setCounter] = useState(120);
 
   const { roomId } = useParams();
-  const { socket, setAllRooms } = useContext(InfosContext);
-  const intervalRef = useRef(0);
   const navigate = useNavigate();
+  const { socket, setAllRooms } = useContext(InfosContext);
+  // const intervalRef = useRef(0);
 
   const result = useAnimation();
   const correct = useAnimation();
@@ -51,12 +52,14 @@ export const Room = () => {
     );
 
     socket.on('quiz_started', (payload: any) => {
-      console.log('COMEÇOOOOOOU');
+      console.log('counter', payload.counter);
+      // setCounter(payload.counter);
       handleStartQuiz();
     });
 
     socket.on('quiz_ended', (payload: any) => {
-      console.log('TERMINOOOOU');
+      console.log('TERMINOOOOU', payload);
+      setIsResultModalOpen(true);
     });
   }, [socket]);
 
@@ -88,12 +91,11 @@ export const Room = () => {
     })();
   }, []);
 
-  useEffect(() => {
-    if (counter === 0) {
-      clearInterval(intervalRef.current);
-      setIsResultModalOpen(true);
-    }
-  }, [counter]);
+  // useEffect(() => {
+  //   if (counter === 0) {
+  //     setIsResultModalOpen(true);
+  //   }
+  // }, [counter]);
 
   // The purpose of this useEffect is emit and event to socket io when the room page is unmounted
   // in other words, when the user gets out of the room
@@ -126,15 +128,7 @@ export const Room = () => {
   }, [gameroom]);
 
   function handleStartQuiz() {
-    const interval = setInterval(() => {
-      setCounter((prev) => {
-        if (prev > 0) {
-          return (prev -= 1);
-        }
-        return prev;
-      });
-    }, 1000);
-    intervalRef.current = interval;
+    setHasStarted(true);
   }
 
   function handlePassToNextQuestion() {
@@ -155,8 +149,6 @@ export const Room = () => {
 
   function handleExitRoom() {
     navigate('/');
-
-    // location.reload();
   }
 
   if (questions.length < 0) {
@@ -164,56 +156,62 @@ export const Room = () => {
   }
 
   return (
-    <Container>
-      <StyledToastContainer
-        autoClose={2000}
-        pauseOnHover={false}
-        draggable
-        closeOnClick={false}
-        position="top-center"
-        enableMultiContainer={false}
-      />
-      <QuestionBoard>
-        <Header>
-          <SideInfos>
-            <p className="people-progress">{peopleAmount}/10</p>
-          </SideInfos>
-          <motion.div
-            className="result-board"
-            animate={result}
-            initial={{ y: -100, opacity: 0 }}
-          >
-            <motion.div className="result" animate={correct}>
-              <p>Correct</p> <p>{correctAnswersAmount}</p>
-            </motion.div>
-            <motion.div className="result" animate={incorrect}>
-              <p>Incorrect</p> <p>{incorrectAnswersAmount}</p>
-            </motion.div>
-            <div className="home-button" onClick={() => handleExitRoom()}>
-              Home
-            </div>
-          </motion.div>
-          <SideInfos>
-            <p className="timer">{counter}</p>
-          </SideInfos>
-        </Header>
-        <Question
-          content={questions[currentQuestion]?.content}
-          alternatives={questions[currentQuestion]?.alternatives}
-          correctAnswer={questions[currentQuestion]?.correct_answer}
-          handlePassToNextQuestion={handlePassToNextQuestion}
-          setCorrectAnswersAmount={setCorrectAnswersAmount}
-          setIncorrectAnswersAmount={setIncorrectAnswersAmount}
-          controls={{ result, correct, incorrect } as any}
+    <>
+      <Blocker hasStarted={hasStarted}>
+        <p>The game will start only when the room is full</p>
+        <button onClick={() => handleExitRoom()}>Exit Room</button>
+      </Blocker>
+      <Container hasStarted={hasStarted}>
+        <StyledToastContainer
+          autoClose={2000}
+          pauseOnHover={false}
+          draggable
+          closeOnClick={false}
+          position="top-center"
+          enableMultiContainer={false}
         />
-      </QuestionBoard>
-      <ResultModal
-        isModalOpen={isResultModalOpen}
-        setIsModalOpen={setIsResultModalOpen}
-        correctAnswersAmount={correctAnswersAmount}
-        incorrectAnswersAmount={incorrectAnswersAmount}
-        handleRestartQuiz={handleRestartQuiz}
-      />
-    </Container>
+        <QuestionBoard>
+          <Header>
+            <SideInfos>
+              <p className="people-progress">{peopleAmount}/10</p>
+            </SideInfos>
+            <motion.div
+              className="result-board"
+              animate={result}
+              initial={{ y: -100, opacity: 0 }}
+            >
+              <motion.div className="result" animate={correct}>
+                <p>Correct</p> <p>{correctAnswersAmount}</p>
+              </motion.div>
+              <motion.div className="result" animate={incorrect}>
+                <p>Incorrect</p> <p>{incorrectAnswersAmount}</p>
+              </motion.div>
+              <div className="home-button" onClick={() => handleExitRoom()}>
+                Home
+              </div>
+            </motion.div>
+            <SideInfos>
+              <p className="timer">{counter}</p>
+            </SideInfos>
+          </Header>
+          <Question
+            content={questions[currentQuestion]?.content}
+            alternatives={questions[currentQuestion]?.alternatives}
+            correctAnswer={questions[currentQuestion]?.correct_answer}
+            handlePassToNextQuestion={handlePassToNextQuestion}
+            setCorrectAnswersAmount={setCorrectAnswersAmount}
+            setIncorrectAnswersAmount={setIncorrectAnswersAmount}
+            controls={{ result, correct, incorrect } as any}
+          />
+        </QuestionBoard>
+        <ResultModal
+          isModalOpen={isResultModalOpen}
+          setIsModalOpen={setIsResultModalOpen}
+          correctAnswersAmount={correctAnswersAmount}
+          incorrectAnswersAmount={incorrectAnswersAmount}
+          handleRestartQuiz={handleRestartQuiz}
+        />
+      </Container>
+    </>
   );
 };

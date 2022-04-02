@@ -30,7 +30,6 @@ export const Rooms = () => {
 
   useEffect(() => {
     socket.on('person_entered_in_room', (data: any) => {
-      console.log('some person entered the room', data);
       setAllRooms((allRooms: any) => {
         return allRooms.map((gameroom: any) => {
           if (gameroom.id === data.gameroom.id) {
@@ -50,7 +49,6 @@ export const Rooms = () => {
         gameroom: any;
         participantsAmount: number;
       }) => {
-        console.log('some participant left the room');
         setAllRooms((allRooms: any) => {
           return allRooms.map((gameroom: any) => {
             if (gameroom.id === data.gameroom.id) {
@@ -69,7 +67,11 @@ export const Rooms = () => {
       try {
         if (allRooms.length === 0) {
           const { data: rooms } = await RoomsService.listAllGamerooms();
-          setAllRooms(rooms);
+          if (rooms.length === 0) {
+            // const await Game
+          } else {
+            setAllRooms(rooms);
+          }
         }
       } catch (error: any) {
         console.log(error);
