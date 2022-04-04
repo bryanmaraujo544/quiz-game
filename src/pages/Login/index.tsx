@@ -51,6 +51,7 @@ export const Login = () => {
 
         if (participantCreated) {
           socket.emit('join_room', {
+            gameroomId: gameroomCreated.id,
             roomId: roomId,
             username: username,
           });
@@ -69,6 +70,7 @@ export const Login = () => {
         }
         if (participantCreated) {
           socket.emit('join_room', {
+            gameroomId: gameroom.id,
             roomId: roomId,
             username: username,
           });

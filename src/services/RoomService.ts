@@ -23,9 +23,7 @@ class RoomService {
   }
 
   async getGameroomOfRoom({ roomId }: { roomId: number }) {
-    console.log('ROOM ID getGamerrom', roomId);
     const { data } = await this.httpClient.get(`/gamerooms/${roomId}`);
-    console.log({ data });
     return data;
   }
 

@@ -26,7 +26,6 @@ export const Rooms = () => {
   const navigate = useNavigate();
   // const [allRooms, setAllRooms] = useState([] as Gameroom[]);
   const { socket, allRooms, setAllRooms } = useContext(InfosContext);
-  console.log({ allRooms });
 
   useEffect(() => {
     socket.on('person_entered_in_room', (data: any) => {
@@ -34,7 +33,6 @@ export const Rooms = () => {
       setAllRooms((allRooms: any) => {
         return allRooms.map((room: any) => {
           const gameroom = room?.gamerooms[0];
-          console.log('gameroom when entered', gameroom);
 
           if (gameroom?.id === data?.room?.gamerooms[0]?.id) {
             return data.room;
@@ -47,9 +45,13 @@ export const Rooms = () => {
     });
 
     socket.on('participant_left_this_room', (data: any) => {
+      console.log('person left the room <Rooms />', data);
       setAllRooms((allRooms: any) => {
         return allRooms.map((room: any) => {
-          if (room.gamerooms[0].id === data.room.gamerooms[0].id) {
+          const roomGameroom = room?.gamerooms[0];
+          if (roomGameroom?.id === data?.gameroomId) {
+            return data.room;
+          } else if (!roomGameroom) {
             return data.room;
           }
           return room;
@@ -64,7 +66,6 @@ export const Rooms = () => {
         if (allRooms.length === 0) {
           const { data: rooms } = await RoomsService.listAllRooms();
           setAllRooms(rooms);
-          console.log({ rooms });
         }
       } catch (error: any) {
         console.log(error);
@@ -73,23 +74,19 @@ export const Rooms = () => {
   }, []);
 
   async function handleEnterRoom(room: any) {
-    console.log('ROOM ID', room.id);
     const usernameInStorage = localStorage.getItem('username');
     try {
       if (usernameInStorage) {
         const gameroom = await RoomService.getGameroomOfRoom({
           roomId: Number(room.id),
         });
-        console.log('Is there a gameroom?', gameroom);
 
         if (!gameroom) {
-          console.log('there is no gameroom');
           // When some user enter in the room and he is the first to enter, any gameroom is opened
           // with that room, so the first user is "responsible" to create the gameroom
           const { gameroomCreated } = await RoomService.createGameroom({
             roomId: Number(room.id),
           });
-          console.log('gameroom created when there is no one', gameroomCreated);
 
           const { participantCreated, message } =
             await RoomService.createParticipant({
@@ -98,11 +95,10 @@ export const Rooms = () => {
             });
 
           if (!participantCreated) {
-            // console.log('participant it was not created')
             window.alert(message);
           } else {
-            console.log('participant it was created. ready to enter the room');
             socket.emit('join_room', {
+              gameroomId: gameroom.id,
               roomId: room.id,
               username: usernameInStorage,
             });
@@ -122,6 +118,7 @@ export const Rooms = () => {
           window.alert(message);
         } else {
           socket.emit('join_room', {
+            gameroomId: gameroom.id,
             roomId: room.id,
             username: usernameInStorage,
           });
@@ -140,7 +137,11 @@ export const Rooms = () => {
       <h1>Rooms</h1>
       <div className="rooms">
         {allRooms.map(({ id, title, photo_url, gamerooms }: any, i: number) => (
-          <Room className="room" isFull={i === 5} key={id}>
+          <Room
+            className="room"
+            isFull={gamerooms[0]?.has_started === true}
+            key={id}
+          >
             <p className="room-title">{title}</p>
             <div className="img-container">
               <img src={photo_url} alt="" />
@@ -148,7 +149,10 @@ export const Rooms = () => {
                 {gamerooms[0]?.participants?.length || 0}/<strong>10</strong>
               </p>
             </div>
-            <button onClick={() => handleEnterRoom({ id })} disabled={i === 5}>
+            <button
+              onClick={() => handleEnterRoom({ id })}
+              disabled={gamerooms[0]?.has_started}
+            >
               Entrar
             </button>
           </Room>

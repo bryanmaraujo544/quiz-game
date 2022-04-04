@@ -32,36 +32,32 @@ export const Room = () => {
 
   useEffect(() => {
     socket.on('person_entered_in_room', (data: any) => {
-      console.log('PERSON ENTERED IN ROOM', data);
-      setPeopleAmount(data?.participantsAmount);
-      toast(`${data.username} entered the room`, {
-        autoClose: 1000,
-        position: 'bottom-left',
-      });
+      // if the gameroom of the person who entered is equal to the gameroom of the user that received this event
+      // because the user need to see only the users who entered in his room
+      if (data?.room?.gamerooms[0]?.id === gameroom.id) {
+        setPeopleAmount(data?.participantsAmount);
+        toast(`${data.username} entered the room`, {
+          autoClose: 1000,
+          position: 'bottom-left',
+        });
+      }
     });
 
-    socket.on(
-      'participant_left_this_room',
-      (data: {
-        username: string;
-        gameroomId: string;
-        participantsAmount: number;
-      }) => {
-        setPeopleAmount(data.participantsAmount);
-      }
-    );
+    socket.on('participant_left_this_room', (data: any) => {
+      setPeopleAmount(data.participantsAmount);
+      // if (data?.room?.gamerooms[0]?.id === gameroom.id) {
+      // }
+    });
 
     socket.on('quiz_started', (payload: any) => {
-      console.log('counter', payload.counter);
-      // setCounter(payload.counter);
+      setCounter(payload.counter);
       handleStartQuiz();
     });
 
     socket.on('quiz_ended', (payload: any) => {
-      console.log('TERMINOOOOU', payload);
       setIsResultModalOpen(true);
     });
-  }, [socket]);
+  }, [socket, gameroom]);
 
   useEffect(() => {
     const username = localStorage.getItem('username') as any;
@@ -91,12 +87,6 @@ export const Room = () => {
     })();
   }, []);
 
-  // useEffect(() => {
-  //   if (counter === 0) {
-  //     setIsResultModalOpen(true);
-  //   }
-  // }, [counter]);
-
   // The purpose of this useEffect is emit and event to socket io when the room page is unmounted
   // in other words, when the user gets out of the room
   useEffect(() => {
@@ -112,16 +102,21 @@ export const Room = () => {
 
         setAllRooms((allRooms: any) => {
           return allRooms.map((room: any) => {
-            const gameroom = room.gamerooms[0];
+            const roomGameroom = room.gamerooms[0];
+            console.log({ roomGameroom });
 
-            if (gameroom?.id === gameroom?.id) {
-              const participants = gameroom?.participants?.filter(
+            if (roomGameroom?.id === gameroom?.id) {
+              console.log('EQUAL', roomGameroom?.id, gameroom?.id);
+              const participants = roomGameroom?.participants?.filter(
                 (part: any) => part.username !== username
               );
-              console.log({ participants });
 
-              return { ...room, gamerooms: [{ ...gameroom, participants }] };
+              return {
+                ...room,
+                gamerooms: [{ ...roomGameroom, participants }],
+              };
             }
+            return room;
           });
         });
         socket.emit('participant_left_room', {
