@@ -73,6 +73,7 @@ export const Rooms = () => {
   }, []);
 
   async function handleEnterRoom(room: any) {
+    console.log('ROOM ID', room.id);
     const usernameInStorage = localStorage.getItem('username');
     try {
       if (usernameInStorage) {
