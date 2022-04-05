@@ -149,7 +149,7 @@ export const Rooms = () => {
             <div className="img-container">
               <img src={photo_url} alt="" />
               <p className="people-amount">
-                {gamerooms[0]?.participants?.length || 0}/<strong>10</strong>
+                {gamerooms[0]?.participants?.length || 0}/<strong>5</strong>
               </p>
             </div>
             <button

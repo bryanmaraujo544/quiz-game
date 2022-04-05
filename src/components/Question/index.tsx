@@ -54,7 +54,7 @@ export const Question = ({
     const isCorrect = answerChosen === correctAnswer;
     console.log({ isCorrect });
 
-    await questionControls.start({
+    questionControls.start({
       y: -150,
       opacity: 0,
       transition: { duration: 0.1 },
@@ -65,20 +65,20 @@ export const Question = ({
       transition: { duration: 0.25 },
     });
 
-    await controls.result.start({
+    controls.result.start({
       y: -200,
       opacity: 0,
       transition: { duration: 0.1 },
     });
 
-    await controls.result.start({
+    controls.result.start({
       y: 0,
       opacity: 1,
       transition: { duration: 0.25 },
     });
 
-    setIsModalOpen(false);
     handlePassToNextQuestion();
+    setIsModalOpen(false);
 
     if (isCorrect) {
       setCorrectAnswersAmount((prevAmount: number) => (prevAmount += 1));

@@ -62,7 +62,7 @@ export const Modal = ({
     }
   }, [isModalOpen]);
 
-  return (
+  return ReactDOM.createPortal(
     <Overlay
       isOpen={isModalOpen}
       as={motion.div}
@@ -79,27 +79,7 @@ export const Modal = ({
         </div>
         <div className="body">{children}</div>
       </ModalContainer>
-    </Overlay>
+    </Overlay>,
+    document?.getElementById('modal-root') as any
   );
-
-  // return ReactDOM.createPortal(
-  //   <Overlay
-  //     isOpen={isModalOpen}
-  //     as={motion.div}
-  //     variants={overlayVariants(delayToOpen)}
-  //     animate={overlayControls}
-  //   >
-  //     <ModalContainer as={motion.div} variants={modalVariants}>
-  //       <div className="header">
-  //         <h3>{title}</h3>
-  //         <AiOutlineCloseCircle
-  //           className="icon"
-  //           onClick={() => handleCloseModal()}
-  //         />
-  //       </div>
-  //       <div className="body">{children}</div>
-  //     </ModalContainer>
-  //   </Overlay>,
-  //   document?.getElementById('modal-root') as any
-  // );
 };

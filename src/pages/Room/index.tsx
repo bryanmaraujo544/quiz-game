@@ -52,6 +52,7 @@ export const Room = () => {
 
     socket.on('quiz_started', (payload: any) => {
       if (!hasStarted) {
+        console.log('handle start quiz');
         handleStartQuiz();
       }
       // setHasStarted(true);
@@ -90,20 +91,21 @@ export const Room = () => {
   }, []);
 
   useEffect(() => {
-    if (counter <= 0) {
+    if (counter === 0) {
       setIsResultModalOpen(true);
     }
   }, [counter]);
 
-  useEffect(() => {
-    (async () => {
-      const { participantCreated } = await QuestionService.updateParticipant({
-        participantId: participant.id,
-        correctAnswers: correctAnswersAmount,
-        incorrectAnswers: incorrectAnswersAmount,
-      });
-    })();
-  }, [correctAnswersAmount, incorrectAnswersAmount]);
+  // useEffect(() => {
+  //   (async () => {
+  //     console.log('update', { correctAnswersAmount, incorrectAnswersAmount });
+  //     const { participantCreated } = await QuestionService.updateParticipant({
+  //       participantId: participant.id,
+  //       correctAnswers: correctAnswersAmount,
+  //       incorrectAnswers: incorrectAnswersAmount,
+  //     });
+  //   })();
+  // }, [correctAnswersAmount, incorrectAnswersAmount]);
 
   function handleStartQuiz() {
     setHasStarted(true);
@@ -128,9 +130,7 @@ export const Room = () => {
   function handleExitRoom() {
     const username = localStorage.getItem('username') as any;
 
-    console.log('SAIU');
-    console.log('gameroomId', gameroom);
-    if (gameroom) {
+    if (gameroom.id) {
       // Here I am taking out the participant that left the room in frontend
       // because I am emitting the socket event that delete the participant in server
       // and in the same time grabbing the allRooms informations in interface when I go to Rooms,
@@ -184,7 +184,7 @@ export const Room = () => {
         <QuestionBoard>
           <Header>
             <SideInfos>
-              <p className="people-progress">{peopleAmount}/10</p>
+              <p className="people-progress">{peopleAmount || '-'}/5</p>
             </SideInfos>
             <motion.div
               className="result-board"

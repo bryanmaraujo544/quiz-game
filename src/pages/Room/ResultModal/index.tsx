@@ -1,7 +1,5 @@
 import { ResultBoard } from './styles';
 import { Modal } from '../../../components/Modal';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 interface Props {
   isModalOpen: boolean;
@@ -19,12 +17,9 @@ export const ResultModal = ({
   incorrectAnswersAmount,
   handleExitRoom,
 }: Props) => {
-  const navigate = useNavigate();
-
   async function handleCloseModal() {
-    handleExitRoom();
     setIsModalOpen(false);
-    navigate('/');
+    handleExitRoom();
   }
 
   return (
