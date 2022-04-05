@@ -8,6 +8,7 @@ import { InfosContext } from '../../contexts/InfosContext';
 import RoomService from '../../services/RoomService';
 import { toast } from 'react-toastify';
 import { StyledToastContainer } from '../../components/StyledToastContainer';
+import QuestionService from '../../services/QuestionService';
 
 export const Room = () => {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
@@ -23,7 +24,7 @@ export const Room = () => {
 
   const { roomId } = useParams();
   const navigate = useNavigate();
-  const { socket, setAllRooms } = useContext(InfosContext);
+  const { socket, setAllRooms, participant } = useContext(InfosContext);
   // const intervalRef = useRef(0);
 
   const result = useAnimation();
@@ -44,19 +45,20 @@ export const Room = () => {
     });
 
     socket.on('participant_left_this_room', (data: any) => {
-      setPeopleAmount(data.participantsAmount);
-      // if (data?.room?.gamerooms[0]?.id === gameroom.id) {
-      // }
+      if (data?.room?.gamerooms[0]?.id === gameroom.id) {
+        setPeopleAmount(data.participantsAmount);
+      }
     });
 
     socket.on('quiz_started', (payload: any) => {
+      if (!hasStarted) {
+        handleStartQuiz();
+      }
+      // setHasStarted(true);
       setCounter(payload.counter);
-      handleStartQuiz();
     });
 
-    socket.on('quiz_ended', (payload: any) => {
-      setIsResultModalOpen(true);
-    });
+    // socket.on('quiz_ended', (payload: any) => {});
   }, [socket, gameroom]);
 
   useEffect(() => {
@@ -87,45 +89,21 @@ export const Room = () => {
     })();
   }, []);
 
-  // The purpose of this useEffect is emit and event to socket io when the room page is unmounted
-  // in other words, when the user gets out of the room
   useEffect(() => {
-    const username = localStorage.getItem('username') as any;
+    if (counter <= 0) {
+      setIsResultModalOpen(true);
+    }
+  }, [counter]);
 
-    return () => {
-      console.log('SAIU');
-      if (gameroom?.id) {
-        // Here I am taking out the participant that left the room in frontend
-        // because I am emitting the socket event that delete the participant in server
-        // and in the same time grabbing the allRooms informations in interface when I go to Rooms,
-        // so probably this time it's not enough to get updated infos
-
-        setAllRooms((allRooms: any) => {
-          return allRooms.map((room: any) => {
-            const roomGameroom = room.gamerooms[0];
-            console.log({ roomGameroom });
-
-            if (roomGameroom?.id === gameroom?.id) {
-              console.log('EQUAL', roomGameroom?.id, gameroom?.id);
-              const participants = roomGameroom?.participants?.filter(
-                (part: any) => part.username !== username
-              );
-
-              return {
-                ...room,
-                gamerooms: [{ ...roomGameroom, participants }],
-              };
-            }
-            return room;
-          });
-        });
-        socket.emit('participant_left_room', {
-          username,
-          gameroomId: gameroom?.id,
-        });
-      }
-    };
-  }, [gameroom]);
+  useEffect(() => {
+    (async () => {
+      const { participantCreated } = await QuestionService.updateParticipant({
+        participantId: participant.id,
+        correctAnswers: correctAnswersAmount,
+        incorrectAnswers: incorrectAnswersAmount,
+      });
+    })();
+  }, [correctAnswersAmount, incorrectAnswersAmount]);
 
   function handleStartQuiz() {
     setHasStarted(true);
@@ -148,6 +126,39 @@ export const Room = () => {
   }
 
   function handleExitRoom() {
+    const username = localStorage.getItem('username') as any;
+
+    console.log('SAIU');
+    console.log('gameroomId', gameroom);
+    if (gameroom) {
+      // Here I am taking out the participant that left the room in frontend
+      // because I am emitting the socket event that delete the participant in server
+      // and in the same time grabbing the allRooms informations in interface when I go to Rooms,
+      // so probably this time it's not enough to get updated infos
+
+      setAllRooms((allRooms: any) => {
+        return allRooms.map((room: any) => {
+          const roomGameroom = room.gamerooms[0];
+
+          if (roomGameroom?.id === gameroom?.id) {
+            const participants = roomGameroom?.participants?.filter(
+              (part: any) => part.username !== username
+            );
+
+            return {
+              ...room,
+              gamerooms: [{ ...roomGameroom, participants }],
+            };
+          }
+          return room;
+        });
+      });
+
+      socket.emit('participant_left_room', {
+        username,
+        gameroomId: gameroom?.id,
+      });
+    }
     navigate('/');
   }
 
@@ -210,6 +221,7 @@ export const Room = () => {
           correctAnswersAmount={correctAnswersAmount}
           incorrectAnswersAmount={incorrectAnswersAmount}
           handleRestartQuiz={handleRestartQuiz}
+          handleExitRoom={handleExitRoom}
         />
       </Container>
     </>

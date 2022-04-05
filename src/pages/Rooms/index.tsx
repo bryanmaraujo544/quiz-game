@@ -25,7 +25,8 @@ interface Gameroom {
 export const Rooms = () => {
   const navigate = useNavigate();
   // const [allRooms, setAllRooms] = useState([] as Gameroom[]);
-  const { socket, allRooms, setAllRooms } = useContext(InfosContext);
+  const { socket, allRooms, setAllRooms, setParticipant } =
+    useContext(InfosContext);
 
   useEffect(() => {
     socket.on('person_entered_in_room', (data: any) => {
@@ -93,6 +94,7 @@ export const Rooms = () => {
               username: usernameInStorage,
               gameroomId: gameroomCreated.id,
             });
+          setParticipant(participantCreated);
 
           if (!participantCreated) {
             window.alert(message);
@@ -113,6 +115,7 @@ export const Rooms = () => {
             username: usernameInStorage,
             gameroomId: gameroom.id,
           });
+        setParticipant(participantCreated);
 
         if (participantCreated === null) {
           window.alert(message);

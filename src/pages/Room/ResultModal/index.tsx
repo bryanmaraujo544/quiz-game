@@ -9,6 +9,7 @@ interface Props {
   correctAnswersAmount: number;
   incorrectAnswersAmount: number;
   handleRestartQuiz: any;
+  handleExitRoom: any;
 }
 
 export const ResultModal = ({
@@ -16,12 +17,12 @@ export const ResultModal = ({
   setIsModalOpen,
   correctAnswersAmount,
   incorrectAnswersAmount,
-  handleRestartQuiz,
+  handleExitRoom,
 }: Props) => {
   const navigate = useNavigate();
 
   async function handleCloseModal() {
-    handleRestartQuiz();
+    handleExitRoom();
     setIsModalOpen(false);
     navigate('/');
   }

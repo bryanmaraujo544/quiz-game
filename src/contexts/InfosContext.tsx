@@ -28,6 +28,8 @@ interface CtxProps {
   socket: any;
   allRooms: any;
   setAllRooms: any;
+  participant: any;
+  setParticipant: any;
 }
 
 export const InfosContext = createContext({} as CtxProps);
@@ -36,12 +38,22 @@ const socket = io('http://localhost:5000');
 
 export const InfosContextProvider = ({ children }: any) => {
   const [user, setUser] = useState({} as User | {});
+  const [participant, setParticipant] = useState({});
   const [allRooms, setAllRooms] = useState([] as any);
   console.log('ALL ROOMS', allRooms);
+  console.log({ participant });
 
   return (
     <InfosContext.Provider
-      value={{ user, setUser, socket, allRooms, setAllRooms }}
+      value={{
+        user,
+        setUser,
+        socket,
+        allRooms,
+        setAllRooms,
+        participant,
+        setParticipant,
+      }}
     >
       {children}
     </InfosContext.Provider>

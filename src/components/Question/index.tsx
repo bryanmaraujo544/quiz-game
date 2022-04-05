@@ -52,6 +52,8 @@ export const Question = ({
 
   async function handleConfirmAnswer() {
     const isCorrect = answerChosen === correctAnswer;
+    console.log({ isCorrect });
+
     await questionControls.start({
       y: -150,
       opacity: 0,

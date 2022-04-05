@@ -7,7 +7,7 @@ import RoomService from '../../services/RoomService';
 
 export const Login = () => {
   const [username, setUsername] = useState('');
-  const { setUser, socket } = useContext(InfosContext);
+  const { setUser, socket, setParticipant } = useContext(InfosContext);
 
   const { roomId } = useParams();
   const navigate = useNavigate();
@@ -44,6 +44,7 @@ export const Login = () => {
             username: username,
             gameroomId: gameroomCreated.id,
           });
+        setParticipant(participantCreated);
 
         if (!participantCreated) {
           window.alert(message);
