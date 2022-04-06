@@ -9,23 +9,29 @@ import RoomService from '../../services/RoomService';
 import { toast } from 'react-toastify';
 import { StyledToastContainer } from '../../components/StyledToastContainer';
 import QuestionService from '../../services/QuestionService';
+import { WaitingModal } from './WaitingModal';
 
 export const Room = () => {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
   const [questions, setQuestions] = useState([] as any);
   const [gameroom, setGameroom] = useState(null || ({} as any));
+  console.log({ gameroom });
+
+  const [hasStarted, setHasStarted] = useState(false);
+  const [isUserWaiting, setIsUserWaiting] = useState(false);
+  const [shallShowResults, setShallShowResults] = useState(false);
+
+  const [peopleAmount, setPeopleAmount] = useState(0);
   const [correctAnswersAmount, setCorrectAnswersAmount] = useState(0);
   const [incorrectAnswersAmount, setIncorrectAnswersAmount] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-
-  const [hasStarted, setHasStarted] = useState(false);
-  const [peopleAmount, setPeopleAmount] = useState(0);
   const [counter, setCounter] = useState(120);
 
   const { roomId } = useParams();
+  console.log('ROOM ID', roomId);
+
   const navigate = useNavigate();
   const { socket, setAllRooms, participant } = useContext(InfosContext);
-  // const intervalRef = useRef(0);
 
   const result = useAnimation();
   const correct = useAnimation();
@@ -52,7 +58,6 @@ export const Room = () => {
 
     socket.on('quiz_started', (payload: any) => {
       if (!hasStarted) {
-        console.log('handle start quiz');
         handleStartQuiz();
       }
       // setHasStarted(true);
@@ -70,18 +75,22 @@ export const Room = () => {
         setQuestions(questionsOfRoom);
 
         // If there is a gameroom already opened with this roomId we get it
-        const gameroom = await RoomService.getGameroomOfRoom({
+        const gameroomOfRoom = await RoomService.getGameroomOfRoom({
           roomId: Number(roomId),
         });
+        if (gameroomOfRoom) {
+          setGameroom(gameroomOfRoom);
+        } else {
+          setGameroom(participant?.gameroom);
+        }
 
         // Create participant in case the page is reload
         await RoomService.createParticipant({
           username: username,
-          gameroomId: gameroom.id,
+          gameroomId: gameroomOfRoom.id,
         });
 
-        setGameroom(gameroom);
-        setPeopleAmount(gameroom.participants.length);
+        setPeopleAmount(gameroomOfRoom.participants.length);
       } catch (error: any) {
         console.log(error.response.data);
       }
@@ -92,20 +101,22 @@ export const Room = () => {
 
   useEffect(() => {
     if (counter === 0) {
+      setShallShowResults(true);
       setIsResultModalOpen(true);
+      setIsUserWaiting(false);
     }
   }, [counter]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     console.log('update', { correctAnswersAmount, incorrectAnswersAmount });
-  //     const { participantCreated } = await QuestionService.updateParticipant({
-  //       participantId: participant.id,
-  //       correctAnswers: correctAnswersAmount,
-  //       incorrectAnswers: incorrectAnswersAmount,
-  //     });
-  //   })();
-  // }, [correctAnswersAmount, incorrectAnswersAmount]);
+  useEffect(() => {
+    (async () => {
+      console.log('update', { correctAnswersAmount, incorrectAnswersAmount });
+      const { participantCreated } = await QuestionService.updateParticipant({
+        participantId: participant.id,
+        correctAnswers: correctAnswersAmount,
+        incorrectAnswers: incorrectAnswersAmount,
+      });
+    })();
+  }, [correctAnswersAmount, incorrectAnswersAmount]);
 
   function handleStartQuiz() {
     setHasStarted(true);
@@ -114,9 +125,9 @@ export const Room = () => {
   function handlePassToNextQuestion() {
     if (currentQuestion < questions?.length - 1) {
       setCurrentQuestion((prevCurrent) => (prevCurrent += 1));
-    } else {
+    } else if (counter !== 0 && currentQuestion === questions?.length - 1) {
       // End of the quiz
-      setIsResultModalOpen(true);
+      setIsUserWaiting(true);
     }
   }
 
@@ -160,6 +171,7 @@ export const Room = () => {
       });
     }
     navigate('/');
+    location.reload();
   }
 
   if (questions.length < 0) {
@@ -168,6 +180,7 @@ export const Room = () => {
 
   return (
     <>
+      <WaitingModal isWaiting={isUserWaiting} />
       <Blocker hasStarted={hasStarted}>
         <p>The game will start only when the room is full</p>
         <button onClick={() => handleExitRoom()}>Exit Room</button>
@@ -222,6 +235,8 @@ export const Room = () => {
           incorrectAnswersAmount={incorrectAnswersAmount}
           handleRestartQuiz={handleRestartQuiz}
           handleExitRoom={handleExitRoom}
+          gameroomId={gameroom?.id}
+          shallShowResults={shallShowResults}
         />
       </Container>
     </>

@@ -1,7 +1,7 @@
 import axios from './utils/HttpClient';
 
 interface Participant {
-  username: string;
+  username?: string;
   gameroomId: number;
 }
 
@@ -32,6 +32,15 @@ class RoomService {
       username,
       gameroomId,
     });
+    return data;
+  }
+
+  async getResult({ gameroomId }: Participant) {
+    console.log('GAMEROOM ID IN SERVICE', gameroomId);
+    const { data } = await this.httpClient.get(
+      `/gamerooms/results/${gameroomId}`
+    );
+
     return data;
   }
 }

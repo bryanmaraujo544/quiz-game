@@ -1,5 +1,7 @@
-import { ResultBoard } from './styles';
+import { ResultBoard, User } from './styles';
 import { Modal } from '../../../components/Modal';
+import { useEffect, useState } from 'react';
+import RoomService from '../../../services/RoomService';
 
 interface Props {
   isModalOpen: boolean;
@@ -8,6 +10,8 @@ interface Props {
   incorrectAnswersAmount: number;
   handleRestartQuiz: any;
   handleExitRoom: any;
+  gameroomId: number;
+  shallShowResults: boolean;
 }
 
 export const ResultModal = ({
@@ -16,11 +20,26 @@ export const ResultModal = ({
   correctAnswersAmount,
   incorrectAnswersAmount,
   handleExitRoom,
+  gameroomId,
+  shallShowResults,
 }: Props) => {
+  const [ranking, setRanking] = useState([]);
+
   async function handleCloseModal() {
     setIsModalOpen(false);
     handleExitRoom();
   }
+
+  useEffect(() => {
+    (async () => {
+      if (shallShowResults) {
+        console.log('GameroomId in ResultModal', gameroomId);
+        const results = await RoomService.getResult({ gameroomId });
+        console.log({ results });
+        setRanking(results.participants);
+      }
+    })();
+  }, [shallShowResults]);
 
   return (
     <Modal
@@ -43,9 +62,21 @@ export const ResultModal = ({
         </div>
         <div className="ranking">
           <h3 className="title">Ranking</h3>
-          {new Array(10).fill('bryan').map((name) => (
-            <p className="user">{name}</p>
-          ))}
+          {ranking.map(
+            (
+              { id, username }: { id: number; username: string },
+              index: number
+            ) => (
+              <User
+                className="user"
+                key={`ranking-${id}`}
+                index={index}
+                length={ranking.length}
+              >
+                {username}
+              </User>
+            )
+          )}
         </div>
 
         <button

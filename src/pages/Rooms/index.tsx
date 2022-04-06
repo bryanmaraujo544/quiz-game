@@ -143,7 +143,7 @@ export const Rooms = () => {
           <Room
             className="room"
             isFull={gamerooms[0]?.has_started === true}
-            key={id}
+            key={`rooms-${id}`}
           >
             <p className="room-title">{title}</p>
             <div className="img-container">

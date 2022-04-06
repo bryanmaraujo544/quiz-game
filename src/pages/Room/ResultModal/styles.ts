@@ -1,17 +1,26 @@
 import styled from 'styled-components';
 
+interface UserProps {
+  index: number;
+  length: number;
+}
+
 export const ResultBoard = styled.div`
   .result-board {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.4rem;
-    padding: 2rem;
+    padding: 1.6rem;
     width: 100%;
 
     .results {
       display: flex;
       gap: 2rem;
+      width: 100%;
+      justify-content: center;
+      margin-top: 0.4rem;
+      padding-bottom: 1.6rem;
+      border-bottom: 1px solid #ced4da;
     }
 
     .result {
@@ -39,11 +48,11 @@ export const ResultBoard = styled.div`
     flex-direction: column;
     width: 100%;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.8rem;
     overflow-y: scroll;
+    margin-bottom: 3.2rem;
 
     .user {
-      font-size: 1.4rem;
     }
   }
 
@@ -62,5 +71,24 @@ export const ResultBoard = styled.div`
   .title {
     font-size: 2.2rem;
     margin: 0.8rem 0;
+  }
+`;
+
+export const User = styled.p<UserProps>`
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #495057;
+  /* font-size: ${({ index }) => `${index}rem`}; */
+
+  &:nth-child(2) {
+    background-color: #f72585;
+    background-image: linear-gradient(45deg, #f72585, #4361ee);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    font-size: 2rem;
+    font-weight: 700;
   }
 `;

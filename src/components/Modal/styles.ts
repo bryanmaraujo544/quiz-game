@@ -14,6 +14,8 @@ export const Overlay = styled.div<Props>`
   width: 100%;
   height: 100%;
   background: #00000050;
+  z-index: 9999999;
+  padding: 1.6rem;
 `;
 
 export const ModalContainer = styled.div`
@@ -35,7 +37,7 @@ export const ModalContainer = styled.div`
     align-items: center;
     padding: 1.2rem 0;
     width: 100%;
-    border-bottom: 1px solid #495057;
+    border-bottom: 1px solid #ced4da;
 
     h3 {
       font-size: 2rem;

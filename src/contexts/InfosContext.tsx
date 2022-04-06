@@ -40,8 +40,6 @@ export const InfosContextProvider = ({ children }: any) => {
   const [user, setUser] = useState({} as User | {});
   const [participant, setParticipant] = useState({});
   const [allRooms, setAllRooms] = useState([] as any);
-  console.log('ALL ROOMS', allRooms);
-  console.log({ participant });
 
   return (
     <InfosContext.Provider
