@@ -6,26 +6,31 @@ interface UserProps {
 }
 
 export const ResultBoard = styled.div`
+  h3 {
+    font-size: 2.4rem;
+    color: #212529;
+    margin-bottom: 1rem;
+  }
   .result-board {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 1.6rem;
+    align-items: flex-start;
+    padding: 1.6rem 0;
     width: 100%;
 
     .results {
       display: flex;
-      gap: 2rem;
+      flex-direction: column;
+      gap: 0.4rem;
       width: 100%;
-      justify-content: center;
+      justify-content: flex-start;
+      align-items: flex-start;
       margin-top: 0.4rem;
-      padding-bottom: 1.6rem;
-      border-bottom: 1px solid #ced4da;
+      padding-bottom: 2.4rem;
     }
 
     .result {
       display: flex;
-      flex-direction: column;
       align-items: center;
 
       &:nth-child(1) {
@@ -33,12 +38,12 @@ export const ResultBoard = styled.div`
       }
 
       &:nth-child(2) {
-        color: #4361ee;
+        color: #495057;
       }
 
       p {
-        font-size: 2rem;
-        font-weight: 700;
+        font-size: 1.8rem;
+        font-weight: 600;
       }
     }
   }
@@ -47,8 +52,8 @@ export const ResultBoard = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    align-items: center;
-    gap: 0.8rem;
+    align-items: flex-start;
+    gap: 0.6rem;
     overflow-y: scroll;
     margin-bottom: 3.2rem;
 
@@ -67,10 +72,11 @@ export const ResultBoard = styled.div`
     color: #fff;
     margin-top: 0.8rem;
     cursor: pointer;
-  }
-  .title {
-    font-size: 2.2rem;
-    margin: 0.8rem 0;
+    transition: all 0.1s linear;
+
+    &:hover {
+      background-color: #f72585;
+    }
   }
 `;
 
@@ -78,6 +84,8 @@ export const User = styled.p<UserProps>`
   font-size: 1.6rem;
   font-weight: 600;
   color: #495057;
+  display: flex;
+  align-items: center;
   /* font-size: ${({ index }) => `${index}rem`}; */
 
   &:nth-child(2) {
@@ -90,5 +98,11 @@ export const User = styled.p<UserProps>`
     -moz-text-fill-color: transparent;
     font-size: 2rem;
     font-weight: 700;
+  }
+
+  .arrow-icon {
+    font-size: 1.6rem;
+    margin-left: 0.4rem;
+    color: #4361ee;
   }
 `;

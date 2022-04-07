@@ -1,8 +1,9 @@
+import { useEffect, useState } from 'react';
+import { IoIosArrowForward } from 'react-icons/io';
+
 import { ResultBoard, User } from './styles';
 import { Modal } from '../../../components/Modal';
-import { useEffect, useState } from 'react';
 import RoomService from '../../../services/RoomService';
-
 interface Props {
   isModalOpen: boolean;
   setIsModalOpen: any;
@@ -24,6 +25,7 @@ export const ResultModal = ({
   shallShowResults,
 }: Props) => {
   const [ranking, setRanking] = useState([]);
+  const usernameInStorage = localStorage.getItem('username');
 
   async function handleCloseModal() {
     setIsModalOpen(false);
@@ -53,10 +55,10 @@ export const ResultModal = ({
           <h3 className="title">Your results</h3>
           <div className="results">
             <div className="result">
-              <p>Correct</p> <p>{correctAnswersAmount}</p>
+              <p>Correct: {correctAnswersAmount}</p>
             </div>
             <div className="result">
-              <p>Incorrect</p> <p>{incorrectAnswersAmount}</p>
+              <p>Incorrect: {incorrectAnswersAmount}</p>
             </div>
           </div>
         </div>
@@ -74,6 +76,9 @@ export const ResultModal = ({
                 length={ranking.length}
               >
                 {username}
+                {username === usernameInStorage && (
+                  <IoIosArrowForward className="arrow-icon" />
+                )}
               </User>
             )
           )}
@@ -84,7 +89,7 @@ export const ResultModal = ({
           className="reset-btn"
           onClick={() => handleCloseModal()}
         >
-          Reset
+          Home Page
         </button>
       </ResultBoard>
     </Modal>
