@@ -1,21 +1,21 @@
 import { useContext, useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { motion, useAnimation } from 'framer-motion';
+
+import RoomService from '../../services/RoomService';
+import QuestionService from '../../services/QuestionService';
 import { Container, QuestionBoard, Header, SideInfos, Blocker } from './styles';
 import { Question } from '../../components/Question';
-import { useNavigate, useParams } from 'react-router-dom';
-import { motion, useAnimation } from 'framer-motion';
 import { ResultModal } from './ResultModal';
 import { InfosContext } from '../../contexts/InfosContext';
-import RoomService from '../../services/RoomService';
-import { toast } from 'react-toastify';
 import { StyledToastContainer } from '../../components/StyledToastContainer';
-import QuestionService from '../../services/QuestionService';
 import { WaitingModal } from './WaitingModal';
 
 export const Room = () => {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
   const [questions, setQuestions] = useState([] as any);
   const [gameroom, setGameroom] = useState(null || ({} as any));
-  console.log({ gameroom });
 
   const [hasStarted, setHasStarted] = useState(false);
   const [isUserWaiting, setIsUserWaiting] = useState(false);
@@ -79,24 +79,35 @@ export const Room = () => {
         const gameroomOfRoom = await RoomService.getGameroomOfRoom({
           roomId: Number(roomId),
         });
+
         if (gameroomOfRoom) {
           setGameroom(gameroomOfRoom);
         } else {
+          console.log('gameroom-participant', participant?.gameroom);
           setGameroom(participant?.gameroom);
+        }
+
+        console.log(
+          'ParticipantGameroom: ',
+          participant?.gameroom,
+          'Gameroom: ',
+          gameroomOfRoom
+        );
+
+        if (!participant?.gameroom && !gameroomOfRoom) {
+          handleExitRoom();
         }
 
         // Create participant in case the page is reload
         await RoomService.createParticipant({
           username: username,
-          gameroomId: gameroomOfRoom.id,
+          gameroomId: gameroomOfRoom?.id,
         });
 
-        setPeopleAmount(gameroomOfRoom.participants.length);
+        setPeopleAmount(gameroomOfRoom?.participants?.length);
       } catch (error: any) {
         console.log(error.response.data);
       }
-
-      // handleStartQuiz();
     })();
   }, []);
 
@@ -110,15 +121,16 @@ export const Room = () => {
 
   useEffect(() => {
     (async () => {
-      console.log('update', { correctAnswersAmount, incorrectAnswersAmount });
-      const { participantCreated } = await QuestionService.updateParticipant({
-        participantId: participant.id,
-        correctAnswers: correctAnswersAmount,
-        incorrectAnswers: incorrectAnswersAmount,
-        secondsRest: counter,
-      });
+      if (participant.id) {
+        const { participantCreated } = await QuestionService.updateParticipant({
+          participantId: participant.id,
+          correctAnswers: correctAnswersAmount,
+          incorrectAnswers: incorrectAnswersAmount,
+          secondsRest: counter,
+        });
+      }
     })();
-  }, [correctAnswersAmount, incorrectAnswersAmount]);
+  }, [correctAnswersAmount, incorrectAnswersAmount, participant]);
 
   function handleStartQuiz() {
     setHasStarted(true);
@@ -175,6 +187,14 @@ export const Room = () => {
     navigate('/');
     location.reload();
   }
+
+  // useEffect(() => {
+  //   window.addEventListener('beforeunload', handleExitRoom);
+
+  //   // return () => {
+  //   //   window.removeEventListener('beforeunload', handleExitRoom);
+  //   // };
+  // }, [gameroom]);
 
   if (questions.length < 0) {
     return <h1>loading</h1>;

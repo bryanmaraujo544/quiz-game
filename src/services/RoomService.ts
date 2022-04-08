@@ -36,7 +36,6 @@ class RoomService {
   }
 
   async getResult({ gameroomId }: Participant) {
-    console.log('GAMEROOM ID IN SERVICE', gameroomId);
     const { data } = await this.httpClient.get(
       `/gamerooms/results/${gameroomId}`
     );

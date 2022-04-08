@@ -30,7 +30,6 @@ export const Rooms = () => {
 
   useEffect(() => {
     socket.on('person_entered_in_room', (data: any) => {
-      console.log('person entered in room <Rooms/>', data);
       setAllRooms((allRooms: any) => {
         return allRooms.map((room: any) => {
           const gameroom = room?.gamerooms[0];
@@ -46,7 +45,6 @@ export const Rooms = () => {
     });
 
     socket.on('participant_left_this_room', (data: any) => {
-      console.log('person left the room <Rooms />', data);
       setAllRooms((allRooms: any) => {
         return allRooms.map((room: any) => {
           const roomGameroom = room?.gamerooms[0];
