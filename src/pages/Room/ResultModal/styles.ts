@@ -84,9 +84,10 @@ export const User = styled.p<UserProps>`
   font-size: 1.6rem;
   font-weight: 600;
   color: #495057;
-  display: flex;
-  align-items: center;
-  /* font-size: ${({ index }) => `${index}rem`}; */
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-content: center;
 
   &:nth-child(2) {
     background-color: #f72585;
@@ -101,9 +102,22 @@ export const User = styled.p<UserProps>`
   }
 
   .arrow-icon {
-    font-size: 1.6rem;
+    font-size: 2rem;
+    margin-top: 0.1rem;
     margin-left: 0.4rem;
     color: #4361ee;
+  }
+
+  .correct-answers {
+    color: #495057;
+    /* color: #f72585; */
+    margin-left: 0.8rem;
+  }
+
+  .time {
+    color: #495057;
+    display: flex;
+    align-items: center;
   }
 `;
 

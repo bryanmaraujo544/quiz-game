@@ -19,6 +19,13 @@ interface Props {
   shallShowResults: boolean;
 }
 
+interface Participant {
+  id: number;
+  username: string;
+  correct_answers: number;
+  seconds_rest: number;
+}
+
 const containerVariants = {
   hidden: {
     opacity: 0,
@@ -150,7 +157,7 @@ export const ResultModal = ({
             <h3 className="title">Ranking</h3>
             {ranking.map(
               (
-                { id, username }: { id: number; username: string },
+                { id, username, correct_answers, seconds_rest }: Participant,
                 index: number
               ) => (
                 <User
@@ -159,10 +166,15 @@ export const ResultModal = ({
                   index={index}
                   length={ranking.length}
                 >
-                  {username}
-                  {username === usernameInStorage && (
-                    <IoIosArrowForward className="arrow-icon" />
-                  )}
+                  <p>{username}</p>
+
+                  <b className="correct-answers">{correct_answers}</b>
+                  <b className="time">
+                    {30 - seconds_rest}s
+                    {username === usernameInStorage && (
+                      <IoIosArrowForward className="arrow-icon" />
+                    )}
+                  </b>
                 </User>
               )
             )}
