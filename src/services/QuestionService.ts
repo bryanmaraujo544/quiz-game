@@ -4,6 +4,7 @@ interface UpdateProps {
   participantId: number;
   correctAnswers: number;
   incorrectAnswers: number;
+  secondsRest: number;
 }
 
 class QuestionService {
@@ -17,10 +18,12 @@ class QuestionService {
     participantId,
     correctAnswers,
     incorrectAnswers,
+    secondsRest,
   }: UpdateProps) {
     return this.httpClient.put(`/participants/${participantId}`, {
       correctAnswers,
       incorrectAnswers,
+      secondsRest,
     });
   }
 }

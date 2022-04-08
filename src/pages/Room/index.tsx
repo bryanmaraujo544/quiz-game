@@ -28,7 +28,6 @@ export const Room = () => {
   const [counter, setCounter] = useState(120);
 
   const { roomId } = useParams();
-  console.log('ROOM ID', roomId);
 
   const navigate = useNavigate();
   const { socket, setAllRooms, participant } = useContext(InfosContext);
@@ -116,6 +115,7 @@ export const Room = () => {
         participantId: participant.id,
         correctAnswers: correctAnswersAmount,
         incorrectAnswers: incorrectAnswersAmount,
+        secondsRest: counter,
       });
     })();
   }, [correctAnswersAmount, incorrectAnswersAmount]);
