@@ -60,8 +60,10 @@ export const Room = () => {
       if (!hasStarted) {
         handleStartQuiz();
       }
-      // setHasStarted(true);
-      setCounter(payload.counter);
+      if (payload.gameroomId === gameroom?.id) {
+        // setHasStarted(true);
+        setCounter(payload.counter);
+      }
     });
 
     // socket.on('quiz_ended', (payload: any) => {});
@@ -197,7 +199,7 @@ export const Room = () => {
         <QuestionBoard>
           <Header>
             <SideInfos>
-              <p className="people-progress">{peopleAmount || '-'}/5</p>
+              <p className="people-progress">{peopleAmount || '5'}/5</p>
             </SideInfos>
             <motion.div
               className="result-board"
