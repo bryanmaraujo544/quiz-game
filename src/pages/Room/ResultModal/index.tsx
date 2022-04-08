@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { IoIosArrowForward } from 'react-icons/io';
+import useSound from 'use-sound';
 
 import { ResultBoard, User, CongratsContainer } from './styles';
 import { Modal } from '../../../components/Modal';
 import RoomService from '../../../services/RoomService';
 import { motion, useAnimation } from 'framer-motion';
+import CongratsSound from '../../../assets/congrats.mp3';
+
 interface Props {
   isModalOpen: boolean;
   setIsModalOpen: any;
@@ -28,7 +31,7 @@ const containerVariants = {
     opacity: 1,
     display: 'flex',
     transition: {
-      delay: 0.75,
+      delay: 0.5,
       when: 'beforeChildren',
     },
   },
@@ -60,6 +63,9 @@ export const ResultModal = ({
 
   const congratsControls = useAnimation();
   const textControls = useAnimation();
+
+  const [playCongrats] = useSound(CongratsSound);
+
   useEffect(() => {
     (async () => {
       if (shallShowResults) {
@@ -73,18 +79,22 @@ export const ResultModal = ({
   }, [shallShowResults]);
 
   useEffect(() => {
-    if (shallShowCongrats) {
-      congratsControls.start('visible');
-      textControls.start((i) => ({
-        opacity: 1,
-        y: 0,
-        transition: { delay: i === 1 ? 1 : 1.75 },
-      }));
-      setTimeout(() => {
-        congratsControls.start('hidden');
-        setShallShowCongrats(false);
-      }, 6000);
-    }
+    (async () => {
+      if (shallShowCongrats) {
+        congratsControls.start('visible');
+        textControls.start((i) => ({
+          opacity: 1,
+          y: 0,
+          transition: { delay: i === 1 ? 1 : 1.75 },
+        }));
+        playCongrats();
+
+        setTimeout(() => {
+          congratsControls.start('hidden');
+          setShallShowCongrats(false);
+        }, 6000);
+      }
+    })();
   }, [shallShowCongrats]);
 
   async function handleCloseModal() {

@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
+import useSound from 'use-sound';
+
 import { Container, Alternative } from './styles';
 import { Modal } from '../Modal';
 import { motion, useAnimation } from 'framer-motion';
+import CorrectSound from '../../assets/correct.mp3';
+import IncorrectSound from '../../assets/incorrect.mp3';
+
 interface Props {
   content: string;
   alternatives: string[];
@@ -25,6 +30,9 @@ export const Question = ({
   const [answerChosen, setAnswerChosen] = useState('');
 
   const questionControls = useAnimation();
+
+  const [playCorrect] = useSound(CorrectSound);
+  const [playIncorrect] = useSound(IncorrectSound);
 
   useEffect(() => {
     (async () => {
@@ -82,10 +90,12 @@ export const Question = ({
 
     if (isCorrect) {
       setCorrectAnswersAmount((prevAmount: number) => (prevAmount += 1));
+      playCorrect();
       await controls.correct.start({ scale: 1.2 });
       controls.correct.start({ scale: 1 });
     } else {
       setIncorrectAnswersAmount((prevAmount: number) => (prevAmount += 1));
+      playIncorrect();
       await controls.incorrect.start({ scale: 1.2 });
       controls.incorrect.start({ scale: 1 });
     }

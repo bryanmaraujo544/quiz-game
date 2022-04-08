@@ -44,13 +44,13 @@ export const Login = () => {
             username: username,
             gameroomId: gameroomCreated.id,
           });
-        setParticipant(participantCreated);
 
         if (!participantCreated) {
           window.alert(message);
         }
 
         if (participantCreated) {
+          setParticipant(participantCreated);
           socket.emit('join_room', {
             gameroomId: gameroomCreated.id,
             roomId: roomId,
@@ -70,6 +70,7 @@ export const Login = () => {
           window.alert(message);
         }
         if (participantCreated) {
+          setParticipant(participantCreated);
           socket.emit('join_room', {
             gameroomId: gameroom.id,
             roomId: roomId,
