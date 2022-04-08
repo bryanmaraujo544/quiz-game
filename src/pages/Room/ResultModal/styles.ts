@@ -106,3 +106,30 @@ export const User = styled.p<UserProps>`
     color: #4361ee;
   }
 `;
+
+export const CongratsContainer = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #f72585;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.6rem;
+  z-index: 99999;
+
+  .congrats-text {
+    font-size: 4.2rem;
+    text-align: center;
+    color: #fff;
+    font-weight: 700;
+
+    .winner {
+      color: #4361ee;
+    }
+  }
+`;

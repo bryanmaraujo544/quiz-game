@@ -14,7 +14,7 @@ export const Overlay = styled.div<Props>`
   width: 100%;
   height: 100%;
   background: #00000050;
-  z-index: 9999999;
+  z-index: 9999;
   padding: 1.6rem;
 `;
 

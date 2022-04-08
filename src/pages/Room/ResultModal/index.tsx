@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { IoIosArrowForward } from 'react-icons/io';
 
-import { ResultBoard, User } from './styles';
+import { ResultBoard, User, CongratsContainer } from './styles';
 import { Modal } from '../../../components/Modal';
 import RoomService from '../../../services/RoomService';
+import { motion, useAnimation } from 'framer-motion';
 interface Props {
   isModalOpen: boolean;
   setIsModalOpen: any;
@@ -15,6 +16,35 @@ interface Props {
   shallShowResults: boolean;
 }
 
+const containerVariants = {
+  hidden: {
+    opacity: 0,
+    display: 'none',
+    transition: {
+      when: 'afterChildren',
+    },
+  },
+  visible: {
+    opacity: 1,
+    display: 'flex',
+    transition: {
+      delay: 0.75,
+      when: 'beforeChildren',
+    },
+  },
+};
+
+const textVariants = {
+  hidden: {},
+  visible: {
+    opacity: 1,
+    y: 0,
+    // transition: {
+    //   staggerChildren: 0.5,
+    // },
+  },
+};
+
 export const ResultModal = ({
   isModalOpen,
   setIsModalOpen,
@@ -25,73 +55,118 @@ export const ResultModal = ({
   shallShowResults,
 }: Props) => {
   const [ranking, setRanking] = useState([]);
+  const [shallShowCongrats, setShallShowCongrats] = useState(false);
   const usernameInStorage = localStorage.getItem('username');
+
+  const congratsControls = useAnimation();
+  const textControls = useAnimation();
+  useEffect(() => {
+    (async () => {
+      if (shallShowResults) {
+        const results = await RoomService.getResult({ gameroomId });
+        setRanking(results.participants);
+        if (results.participants[0]?.username === usernameInStorage) {
+          setShallShowCongrats(true);
+        }
+      }
+    })();
+  }, [shallShowResults]);
+
+  useEffect(() => {
+    if (shallShowCongrats) {
+      congratsControls.start('visible');
+      textControls.start((i) => ({
+        opacity: 1,
+        y: 0,
+        transition: { delay: i === 1 ? 1 : 1.75 },
+      }));
+      setTimeout(() => {
+        congratsControls.start('hidden');
+        setShallShowCongrats(false);
+      }, 6000);
+    }
+  }, [shallShowCongrats]);
 
   async function handleCloseModal() {
     setIsModalOpen(false);
     handleExitRoom();
   }
 
-  useEffect(() => {
-    (async () => {
-      if (shallShowResults) {
-        console.log('GameroomId in ResultModal', gameroomId);
-        const results = await RoomService.getResult({ gameroomId });
-        console.log({ results });
-        setRanking(results.participants);
-      }
-    })();
-  }, [shallShowResults]);
-
   return (
-    <Modal
-      title="Results"
-      isModalOpen={isModalOpen}
-      handleCloseModal={handleCloseModal}
-      delayToOpen={0.5}
-    >
-      <ResultBoard>
-        <div className="result-board">
-          <h3 className="title">Your results</h3>
-          <div className="results">
-            <div className="result">
-              <p>Correct: {correctAnswersAmount}</p>
-            </div>
-            <div className="result">
-              <p>Incorrect: {incorrectAnswersAmount}</p>
+    <>
+      <CongratsContainer
+        as={motion.div}
+        variants={containerVariants}
+        animate={congratsControls}
+      >
+        <motion.p
+          custom={1}
+          variants={textVariants}
+          initial={{ opacity: 0, y: 100 }}
+          animate={textControls}
+          className="congrats-text"
+        >
+          Congratulations <b className="winner">{usernameInStorage}</b>!!!
+        </motion.p>
+        <motion.p
+          custom={2}
+          initial={{ opacity: 0, y: 100 }}
+          animate={textControls}
+          className="congrats-text"
+        >
+          You won the quiz!
+        </motion.p>
+      </CongratsContainer>
+      <Modal
+        title="Results"
+        isModalOpen={isModalOpen}
+        handleCloseModal={handleCloseModal}
+        delayToOpen={0.5}
+        style={{ display: shallShowCongrats ? 'none' : 'flex' }}
+      >
+        <ResultBoard>
+          <div className="result-board">
+            <h3 className="title">Your results</h3>
+            <div className="results">
+              <div className="result">
+                <p>Correct: {correctAnswersAmount}</p>
+              </div>
+              <div className="result">
+                <p>Incorrect: {incorrectAnswersAmount}</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="ranking">
-          <h3 className="title">Ranking</h3>
-          {ranking.map(
-            (
-              { id, username }: { id: number; username: string },
-              index: number
-            ) => (
-              <User
-                className="user"
-                key={`ranking-${id}`}
-                index={index}
-                length={ranking.length}
-              >
-                {username}
-                {username === usernameInStorage && (
-                  <IoIosArrowForward className="arrow-icon" />
-                )}
-              </User>
-            )
-          )}
-        </div>
+          <div className="ranking">
+            <h3 className="title">Ranking</h3>
+            {ranking.map(
+              (
+                { id, username }: { id: number; username: string },
+                index: number
+              ) => (
+                <User
+                  className="user"
+                  key={`ranking-${id}`}
+                  index={index}
+                  length={ranking.length}
+                >
+                  {username}
+                  {username === usernameInStorage && (
+                    <IoIosArrowForward className="arrow-icon" />
+                  )}
+                </User>
+              )
+            )}
+          </div>
 
-        <button
-          type="button"
-          className="reset-btn"
-          onClick={() => handleCloseModal()}
-        >
-          Home Page
-        </button>
-      </ResultBoard>
-    </Modal>
+          <button
+            type="button"
+            className="reset-btn"
+            onClick={() => handleCloseModal()}
+          >
+            Home Page
+          </button>
+        </ResultBoard>
+      </Modal>
+    </>
   );
 };
