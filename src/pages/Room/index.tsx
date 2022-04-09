@@ -56,7 +56,7 @@ export const Room = () => {
     });
 
     socket.on('quiz_started', (payload: any) => {
-      if (!hasStarted) {
+      if (payload.gameroomId === gameroom?.id && !hasStarted) {
         handleStartQuiz();
       }
       if (payload.gameroomId === gameroom?.id) {

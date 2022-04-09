@@ -27,18 +27,20 @@ export const Rooms = () => {
   // const [allRooms, setAllRooms] = useState([] as Gameroom[]);
   const { socket, allRooms, setAllRooms, setParticipant } =
     useContext(InfosContext);
+  console.log({ allRooms });
 
   useEffect(() => {
     socket.on('person_entered_in_room', (data: any) => {
+      console.log('entered', data);
       setAllRooms((allRooms: any) => {
         return allRooms.map((room: any) => {
-          const gameroom = room?.gamerooms[0];
+          const roomGameroom = room?.gamerooms[0];
+          console.log('roomGameroom', roomGameroom);
 
-          if (gameroom?.id === data?.room?.gamerooms[0]?.id) {
-            return data.room;
-          } else if (!gameroom) {
+          if (room.id === data?.room?.id) {
             return data.room;
           }
+
           return room;
         });
       });
@@ -48,11 +50,22 @@ export const Rooms = () => {
       setAllRooms((allRooms: any) => {
         return allRooms.map((room: any) => {
           const roomGameroom = room?.gamerooms[0];
-          if (roomGameroom?.id === data?.gameroomId) {
-            return data.room;
-          } else if (!roomGameroom) {
+
+          if (room?.id === data?.room?.id) {
             return data.room;
           }
+
+          // if (!roomGameroom) {
+          //   return data.room;
+          // }
+
+          // if (roomGameroom?.id === data?.gameroomId) {
+          //   return data.room;
+          // }
+
+          // if (roomGameroom?.id === data?.gameroomId && !roomGameroom) {
+          //   return data.room;
+          // }
           return room;
         });
       });
@@ -76,13 +89,13 @@ export const Rooms = () => {
     const usernameInStorage = localStorage.getItem('username');
     try {
       if (usernameInStorage) {
-        const gameroom = await RoomService.getGameroomOfRoom({
+        const roomGameroom = await RoomService.getGameroomOfRoom({
           roomId: Number(room.id),
         });
 
-        if (!gameroom) {
-          // When some user enter in the room and he is the first to enter, any gameroom is opened
-          // with that room, so the first user is "responsible" to create the gameroom
+        if (!roomGameroom) {
+          // When some user enter in the room and he is the first to enter, any roomGameroom is opened
+          // with that room, so the first user is "responsible" to create the roomGameroom
           const { gameroomCreated } = await RoomService.createGameroom({
             roomId: Number(room.id),
           });
@@ -98,7 +111,7 @@ export const Rooms = () => {
             window.alert(message);
           } else {
             socket.emit('join_room', {
-              gameroomId: gameroom.id,
+              gameroomId: roomGameroom.id,
               roomId: room.id,
               username: usernameInStorage,
             });
@@ -107,11 +120,11 @@ export const Rooms = () => {
           return;
         }
 
-        // If there is some gameroom opened with that room we add the user as participant of that
+        // If there is some roomGameroom opened with that room we add the user as participant of that
         const { participantCreated, message } =
           await RoomService.createParticipant({
             username: usernameInStorage,
-            gameroomId: gameroom.id,
+            gameroomId: roomGameroom.id,
           });
         setParticipant(participantCreated);
 
@@ -119,7 +132,7 @@ export const Rooms = () => {
           window.alert(message);
         } else {
           socket.emit('join_room', {
-            gameroomId: gameroom.id,
+            gameroomId: roomGameroom.id,
             roomId: room.id,
             username: usernameInStorage,
           });
