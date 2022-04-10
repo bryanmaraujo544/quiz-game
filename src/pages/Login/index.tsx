@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Loading from 'react-loading';
+
 import { InfosContext } from '../../contexts/InfosContext';
 import LoginService from '../../services/LoginService';
 import { Container, Form, Input, Button } from './styles';
@@ -7,6 +9,8 @@ import RoomService from '../../services/RoomService';
 
 export const Login = () => {
   const [username, setUsername] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
   const { setUser, socket, setParticipant } = useContext(InfosContext);
 
   const { roomId } = useParams();
@@ -14,6 +18,7 @@ export const Login = () => {
 
   async function handleSubmit(e: any) {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       if (!username) {
@@ -56,6 +61,7 @@ export const Login = () => {
             roomId: roomId,
             username: username,
           });
+          setIsLoading(false);
           navigate(`/room/${roomId}`);
         }
       } else {
@@ -76,6 +82,7 @@ export const Login = () => {
             roomId: roomId,
             username: username,
           });
+          setIsLoading(false);
           navigate(`/room/${roomId}`);
         }
       }
@@ -93,7 +100,13 @@ export const Login = () => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        <Button>Join Room</Button>
+        <Button disabled={isLoading}>
+          {isLoading ? (
+            <Loading type="spinningBubbles" height="3.2rem" width="3.2rem" />
+          ) : (
+            'Join Room'
+          )}
+        </Button>
       </Form>
     </Container>
   );

@@ -22,6 +22,10 @@ export const Container = styled.div`
     display: flex;
     flex-wrap: wrap;
     gap: 1.6rem;
+
+    .rooms-loading {
+      margin-top: 3.2rem;
+    }
   }
 `;
 
@@ -98,10 +102,5 @@ export const Room = styled.div<RoomProps>`
     &:hover {
       background: ${({ isFull }) => (isFull ? '#ccc' : '#4cc9f0')};
     }
-
-    /* .loading {
-      height: 3.2rem;
-      display: block;
-    } */
   }
 `;

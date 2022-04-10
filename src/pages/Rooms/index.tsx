@@ -144,7 +144,12 @@ export const Rooms = () => {
       <h1>Rooms</h1>
       <div className="rooms">
         {isRoomsLoading ? (
-          <Loading type="spinningBubbles" height="12.8rem" width="12.8rem" />
+          <Loading
+            type="spinningBubbles"
+            height="12.8rem"
+            width="12.8rem"
+            className="rooms-loading"
+          />
         ) : (
           allRooms.map(
             ({ id, title, photo_url, gamerooms }: any, i: number) => (

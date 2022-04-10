@@ -25,8 +25,9 @@ export const Form = styled.form`
 
 export const Input = styled.input`
   background: #fff;
-  padding: 1.6rem;
+  padding: 0 1.6rem;
   width: 100%;
+  height: 5.8rem;
   max-width: 40rem;
   border-radius: 999rem;
   border: 3px solid #4361ee;
@@ -43,9 +44,12 @@ export const Input = styled.input`
 `;
 
 export const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
+  height: 5.6rem;
   max-width: 40rem;
-  padding: 1.6rem;
   font-size: 1.6rem;
   font-weight: 700;
   border-radius: 999rem;
