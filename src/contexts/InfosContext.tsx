@@ -5,23 +5,6 @@ interface User {
   id?: number;
   username?: string;
 }
-interface Room {
-  id: number;
-  title: string;
-  photo_url: string;
-}
-
-interface Participant {
-  id: number;
-  username: string;
-}
-
-interface Gameroom {
-  id: number;
-  room: Room;
-  participants: Participant[];
-}
-
 interface CtxProps {
   user: User;
   setUser: any;

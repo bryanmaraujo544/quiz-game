@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 import { IoIosArrowForward } from 'react-icons/io';
 import useSound from 'use-sound';
 
 import { ResultBoard, User, CongratsContainer } from './styles';
 import { Modal } from '../../../components/Modal';
 import RoomService from '../../../services/RoomService';
-import { motion, useAnimation } from 'framer-motion';
 import CongratsSound from '../../../assets/congrats.mp3';
 
 interface Props {

@@ -1,12 +1,6 @@
 import { Container } from './styles';
 import GlobalStyles from '../../styles/global';
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useLocation,
-  useHref,
-} from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { StyledToastContainer } from '../StyledToastContainer';
 import 'react-toastify/dist/ReactToastify.css';
 

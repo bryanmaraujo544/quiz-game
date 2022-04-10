@@ -1,5 +1,5 @@
 import { motion, useAnimation } from 'framer-motion';
-import { ReactNode, useEffect } from 'react';
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 
@@ -54,7 +54,6 @@ export const Modal = ({
   style,
 }: Props) => {
   const overlayControls = useAnimation();
-  const modalControls = useAnimation();
 
   useEffect(() => {
     if (isModalOpen) {
