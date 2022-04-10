@@ -170,7 +170,7 @@ export const ResultModal = ({
 
                   <b className="correct-answers">{correct_answers}</b>
                   <b className="time">
-                    {30 - seconds_rest}s
+                    {seconds_rest === 60 ? '60s' : `${60 - seconds_rest}s`}
                     {username === usernameInStorage && (
                       <IoIosArrowForward className="arrow-icon" />
                     )}

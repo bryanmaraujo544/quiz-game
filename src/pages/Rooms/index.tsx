@@ -30,6 +30,7 @@ export const Rooms = () => {
 
   const { socket, allRooms, setAllRooms, setParticipant } =
     useContext(InfosContext);
+  console.log({ allRooms });
 
   const navigate = useNavigate();
 
@@ -61,6 +62,15 @@ export const Rooms = () => {
         });
       });
     });
+
+    socket.on('some_gameroom_closed', (data: any) => {
+      (async () => {
+        setIsRoomsLoading(true);
+        const { data: rooms } = await RoomsService.listAllRooms();
+        setAllRooms(rooms);
+        setIsRoomsLoading(false);
+      })();
+    });
   }, [socket]);
 
   useEffect(() => {
@@ -86,6 +96,8 @@ export const Rooms = () => {
           roomId: Number(room.id),
         });
 
+        console.log({ roomGameroom });
+
         if (!roomGameroom) {
           // When some user enter in the room and he is the first to enter, any roomGameroom is opened
           // with that room, so the first user is "responsible" to create the roomGameroom
@@ -102,6 +114,7 @@ export const Rooms = () => {
 
           if (!participantCreated) {
             window.alert(message);
+            setRoomClicked(null);
           } else {
             socket.emit('join_room', {
               gameroomId: roomGameroom.id,
@@ -123,6 +136,7 @@ export const Rooms = () => {
 
         if (participantCreated === null) {
           window.alert(message);
+          setRoomClicked(null);
         } else {
           socket.emit('join_room', {
             gameroomId: roomGameroom.id,
