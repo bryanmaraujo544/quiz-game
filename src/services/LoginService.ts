@@ -8,7 +8,10 @@ class LoginService {
   }
 
   async checkUsername(username: string) {
-    return this.httpClient.get(`/participants/check/${username}`);
+    const { data } = await this.httpClient.get(
+      `/participants/check/${username}`
+    );
+    return data;
   }
 }
 

@@ -19,6 +19,14 @@ function App() {
   return (
     <>
       <GlobalStyles />
+      <StyledToastContainer
+        autoClose={2000}
+        pauseOnHover={false}
+        draggable
+        closeOnClick={false}
+        position="top-center"
+        enableMultiContainer={false}
+      />
       <Container>
         <InfosContextProvider>
           <BrowserRouter>

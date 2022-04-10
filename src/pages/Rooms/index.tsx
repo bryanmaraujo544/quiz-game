@@ -6,6 +6,7 @@ import { InfosContext } from '../../contexts/InfosContext';
 import RoomService from '../../services/RoomService';
 import RoomsService from '../../services/RoomsService';
 import { Container, Room } from './styles';
+import { Header } from './Header';
 
 interface Room {
   id: number;
@@ -155,7 +156,7 @@ export const Rooms = () => {
 
   return (
     <Container>
-      <h1>Rooms</h1>
+      <Header />
       <div className="rooms">
         {isRoomsLoading ? (
           <Loading

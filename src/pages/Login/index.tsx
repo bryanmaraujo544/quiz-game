@@ -25,7 +25,7 @@ export const Login = () => {
         return window.alert('please, type something');
       }
 
-      const { data } = await LoginService.checkUsername(username);
+      const data: any = await LoginService.checkUsername(username);
       if (!data.isAuthorized) {
         return window.alert('This user name already is in use');
       }

@@ -9,7 +9,6 @@ import { Container, QuestionBoard, Header, SideInfos, Blocker } from './styles';
 import { Question } from '../../components/Question';
 import { ResultModal } from './ResultModal';
 import { InfosContext } from '../../contexts/InfosContext';
-import { StyledToastContainer } from '../../components/StyledToastContainer';
 import { WaitingModal } from './WaitingModal';
 
 export const Room = () => {
@@ -188,14 +187,6 @@ export const Room = () => {
     location.reload();
   }
 
-  // useEffect(() => {
-  //   window.addEventListener('beforeunload', handleExitRoom);
-
-  //   // return () => {
-  //   //   window.removeEventListener('beforeunload', handleExitRoom);
-  //   // };
-  // }, [gameroom]);
-
   if (questions.length < 0) {
     return <h1>loading</h1>;
   }
@@ -208,14 +199,6 @@ export const Room = () => {
         <button onClick={() => handleExitRoom()}>Exit Room</button>
       </Blocker>
       <Container hasStarted={hasStarted}>
-        <StyledToastContainer
-          autoClose={2000}
-          pauseOnHover={false}
-          draggable
-          closeOnClick={false}
-          position="top-center"
-          enableMultiContainer={false}
-        />
         <QuestionBoard>
           <Header>
             <SideInfos>
