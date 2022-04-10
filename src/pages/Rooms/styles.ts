@@ -20,6 +20,7 @@ export const Container = styled.div`
 
   .rooms {
     display: flex;
+    flex-wrap: wrap;
     gap: 1.6rem;
   }
 `;
@@ -27,8 +28,10 @@ export const Container = styled.div`
 export const Room = styled.div<RoomProps>`
   display: flex;
   gap: 3.2rem;
-  flex: 1;
-  max-width: 30rem;
+  /* max-width: 30rem; */
+  max-width: 100%;
+  width: 30rem;
+  min-width: 20rem;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
@@ -78,9 +81,13 @@ export const Room = styled.div<RoomProps>`
   }
 
   button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 0;
     background: ${({ isFull }) => (isFull ? '#ccc' : '#4361ee')};
-    padding: 1.2rem 3.2rem;
+    width: 100%;
+    height: 4.8rem;
     border-radius: 99rem;
     font-size: 2rem;
     font-weight: 700;
@@ -91,5 +98,10 @@ export const Room = styled.div<RoomProps>`
     &:hover {
       background: ${({ isFull }) => (isFull ? '#ccc' : '#4cc9f0')};
     }
+
+    /* .loading {
+      height: 3.2rem;
+      display: block;
+    } */
   }
 `;

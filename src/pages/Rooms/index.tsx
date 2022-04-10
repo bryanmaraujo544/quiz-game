@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Loading from 'react-loading';
+
 import { InfosContext } from '../../contexts/InfosContext';
 import RoomService from '../../services/RoomService';
 import RoomsService from '../../services/RoomsService';
@@ -23,11 +25,13 @@ interface Gameroom {
 }
 
 export const Rooms = () => {
-  const navigate = useNavigate();
-  // const [allRooms, setAllRooms] = useState([] as Gameroom[]);
+  const [roomClicked, setRoomClicked] = useState(null);
+  const [isRoomsLoading, setIsRoomsLoading] = useState(true);
+
   const { socket, allRooms, setAllRooms, setParticipant } =
     useContext(InfosContext);
-  console.log({ allRooms });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     socket.on('person_entered_in_room', (data: any) => {
@@ -49,23 +53,10 @@ export const Rooms = () => {
     socket.on('participant_left_this_room', (data: any) => {
       setAllRooms((allRooms: any) => {
         return allRooms.map((room: any) => {
-          const roomGameroom = room?.gamerooms[0];
-
           if (room?.id === data?.room?.id) {
             return data.room;
           }
 
-          // if (!roomGameroom) {
-          //   return data.room;
-          // }
-
-          // if (roomGameroom?.id === data?.gameroomId) {
-          //   return data.room;
-          // }
-
-          // if (roomGameroom?.id === data?.gameroomId && !roomGameroom) {
-          //   return data.room;
-          // }
           return room;
         });
       });
@@ -77,6 +68,7 @@ export const Rooms = () => {
       try {
         if (allRooms.length === 0) {
           const { data: rooms } = await RoomsService.listAllRooms();
+          setIsRoomsLoading(false);
           setAllRooms(rooms);
         }
       } catch (error: any) {
@@ -87,6 +79,7 @@ export const Rooms = () => {
 
   async function handleEnterRoom(room: any) {
     const usernameInStorage = localStorage.getItem('username');
+    setRoomClicked(room.id);
     try {
       if (usernameInStorage) {
         const roomGameroom = await RoomService.getGameroomOfRoom({
@@ -150,27 +143,43 @@ export const Rooms = () => {
     <Container>
       <h1>Rooms</h1>
       <div className="rooms">
-        {allRooms.map(({ id, title, photo_url, gamerooms }: any, i: number) => (
-          <Room
-            className="room"
-            isFull={gamerooms[0]?.has_started === true}
-            key={`rooms-${id}`}
-          >
-            <p className="room-title">{title}</p>
-            <div className="img-container">
-              <img src={photo_url} alt="" />
-              <p className="people-amount">
-                {gamerooms[0]?.participants?.length || 0}/<strong>5</strong>
-              </p>
-            </div>
-            <button
-              onClick={() => handleEnterRoom({ id })}
-              disabled={gamerooms[0]?.has_started}
-            >
-              Entrar
-            </button>
-          </Room>
-        ))}
+        {isRoomsLoading ? (
+          <Loading type="spinningBubbles" height="12.8rem" width="12.8rem" />
+        ) : (
+          allRooms.map(
+            ({ id, title, photo_url, gamerooms }: any, i: number) => (
+              <Room
+                className="room"
+                isFull={gamerooms[0]?.has_started === true}
+                key={`rooms-${id}`}
+              >
+                <p className="room-title">{title}</p>
+                <div className="img-container">
+                  <img src={photo_url} alt="" />
+                  <p className="people-amount">
+                    {gamerooms[0]?.participants?.length || 0}/<strong>5</strong>
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleEnterRoom({ id })}
+                  disabled={roomClicked !== null}
+                >
+                  {/* Enter */}
+                  {roomClicked === id ? (
+                    <Loading
+                      className="loading"
+                      type="spinningBubbles"
+                      height="3.2rem"
+                      width="3.2rem"
+                    />
+                  ) : (
+                    'Enter'
+                  )}
+                </button>
+              </Room>
+            )
+          )
+        )}
       </div>
     </Container>
   );
