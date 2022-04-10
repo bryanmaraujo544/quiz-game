@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { IoIosArrowForward } from 'react-icons/io';
-import useSound from 'use-sound';
+import useSound from '../../../hooks/use-sound';
 
 import { ResultBoard, User, CongratsContainer } from './styles';
 import { Modal } from '../../../components/Modal';

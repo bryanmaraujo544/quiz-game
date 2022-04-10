@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useSound from 'use-sound';
+import useSound from '../../hooks/use-sound';
 
 import { Container, Alternative } from './styles';
 import { Modal } from '../Modal';
