@@ -8,6 +8,7 @@ import { Rooms } from '../../pages/Rooms';
 import { Room } from '../../pages/Room';
 import { Login } from '../../pages/Login';
 import { InfosContextProvider } from '../../contexts/InfosContext';
+import { NotFound } from '../NotFound';
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
         <InfosContextProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="*" element={<h1>Not found</h1>} />
+              <Route path="*" element={<NotFound />} />
               <Route path="/" element={<Rooms />} />
               <Route path="/login/:roomId" element={<Login />} />
               <Route path="/room/:roomId" element={<Room />} />
