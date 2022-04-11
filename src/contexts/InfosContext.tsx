@@ -17,7 +17,7 @@ interface CtxProps {
 
 export const InfosContext = createContext({} as CtxProps);
 
-const socket = io('https://english-squiz-api.herokuapp.com/');
+const socket = io('https://english-squiz-api.herokuapp.com');
 
 export const InfosContextProvider = ({ children }: any) => {
   const [user, setUser] = useState({} as User | {});
