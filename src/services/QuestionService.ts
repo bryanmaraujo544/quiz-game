@@ -11,7 +11,7 @@ class QuestionService {
   httpClient: any;
 
   constructor() {
-    this.httpClient = axios('https://english-squiz-api.herokuapp.com/');
+    this.httpClient = axios('https://english-squiz-api.herokuapp.com');
   }
 
   async updateParticipant({
