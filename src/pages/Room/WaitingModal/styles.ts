@@ -17,6 +17,7 @@ export const Container = styled.div<Props>`
   background-color: #00000090;
   gap: 1.6rem;
   padding: 1.2rem;
+  overflow: hidden;
 `;
 
 export const Text = styled.p`

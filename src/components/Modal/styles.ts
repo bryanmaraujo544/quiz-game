@@ -16,6 +16,7 @@ export const Overlay = styled.div<Props>`
   background: #00000050;
   z-index: 9999;
   padding: 1.6rem;
+  overflow: hidden;
 `;
 
 export const ModalContainer = styled.div`

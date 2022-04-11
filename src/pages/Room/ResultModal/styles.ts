@@ -90,6 +90,7 @@ export const User = styled.p<UserProps>`
   align-content: center;
 
   &:nth-child(2) {
+    color: #f72585;
     background-color: #f72585;
     background-image: linear-gradient(45deg, #f72585, #4361ee);
     background-size: 100%;

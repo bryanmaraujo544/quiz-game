@@ -19,7 +19,7 @@ export const Container = styled.header`
     font-size: 4.2rem;
 
     @media (max-width: 768px) {
-      font-size: 3.2rem;
+      font-size: 3.6rem;
     }
 
     @media (max-width: 468px) {
@@ -42,10 +42,6 @@ export const Container = styled.header`
       font-size: 2rem;
       font-weight: 700;
       color: #fff;
-
-      @media (max-width: 468px) {
-        font-size: 1.6rem;
-      }
     }
 
     .edit-icon {
