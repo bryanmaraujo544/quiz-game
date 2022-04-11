@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { FiEdit2 } from 'react-icons/fi';
+import { AiOutlineCheckCircle } from 'react-icons/ai';
+
 import LoginService from '../../../services/LoginService';
 import { Container } from './styles';
 
@@ -19,11 +22,13 @@ export const Header = () => {
     try {
       if (!newUsername) {
         console.log('type something');
-        return toast.error('Type something');
+        return toast.error('Type something', { position: 'top-center' });
       }
       const data: any = await LoginService.checkUsername(newUsername);
       if (!data?.isAuthorized) {
-        return toast.error('This name is already been used :(');
+        return toast.error('This name is already been used :(', {
+          position: 'top-center',
+        });
       }
 
       localStorage.setItem('username', newUsername);
@@ -46,11 +51,15 @@ export const Header = () => {
                 className="input-username"
                 autoFocus
               />
+              <button type="submit">
+                <AiOutlineCheckCircle className="check-icon" />
+              </button>
             </form>
           ) : (
-            <p onClick={handleEditUsername} className="username">
-              {usernameInStorage}
-            </p>
+            <>
+              <p className="username">{usernameInStorage}</p>
+              <FiEdit2 className="edit-icon" onClick={handleEditUsername} />
+            </>
           )}
         </div>
       )}

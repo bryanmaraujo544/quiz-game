@@ -27,6 +27,10 @@ export const Container = styled.div<Props>`
       font-weight: 700;
       color: #3a0ca3;
       text-align: center;
+
+      @media (max-width: 468px) {
+        font-size: ${({ isLarge }) => (isLarge ? '1.6rem' : '2.4rem')};
+      }
     }
   }
 
@@ -42,8 +46,12 @@ export const Container = styled.div<Props>`
     }
 
     @media (max-width: 468px) {
-      grid-template-columns: re;
+      gap: 1.2rem;
     }
+    /* 
+    @media (max-width: 280px) {
+      grid-template-columns: 1fr;
+    } */
   }
 `;
 
@@ -59,6 +67,11 @@ export const Alternative = styled.div<AltProps>`
   font-weight: 700;
   background: #f72585;
   text-align: center;
+
+  @media (max-width: 468px) {
+    padding: 1.6rem 0.4rem;
+    font-size: 1.6rem;
+  }
 
   &:hover {
     background: #4cc9f0;

@@ -21,6 +21,7 @@ function App() {
         closeOnClick={false}
         position="top-center"
         enableMultiContainer={false}
+        hideProgressBar
       />
       <Container>
         <InfosContextProvider>

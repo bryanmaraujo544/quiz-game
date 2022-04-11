@@ -13,15 +13,23 @@ export const Container = styled.div`
   min-height: 100vh;
   padding: 4.8rem;
 
-  h1 {
-    font-size: 4.2rem;
-    color: #fff;
+  @media (max-width: 468px) {
+    padding: 3.6rem;
   }
 
   .rooms {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     flex-wrap: wrap;
     gap: 1.6rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 468px) {
+      grid-template-columns: 1fr;
+    }
 
     .rooms-loading {
       margin-top: 3.2rem;
@@ -32,9 +40,7 @@ export const Container = styled.div`
 export const Room = styled.div<RoomProps>`
   display: flex;
   gap: 3.2rem;
-  max-width: 30rem;
   width: 100%;
-  /* min-width: 20rem; */
   flex-direction: column;
   align-items: center;
   justify-content: space-between;

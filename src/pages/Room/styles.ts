@@ -16,6 +16,18 @@ export const QuestionBoard = styled.div`
   align-items: center;
   padding: 0 2.4rem;
 
+  @media (max-width: 468px) {
+    padding: 0 1.2rem;
+  }
+`;
+
+export const Header = styled.header`
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  width: 100%;
+  z-index: 99999;
+
   .result-board {
     position: relative;
     display: flex;
@@ -27,6 +39,12 @@ export const QuestionBoard = styled.div`
     width: 100%;
     max-width: 30rem;
     border-radius: 0 0 1.6rem 1.6rem;
+
+    @media (max-width: 468px) {
+      padding: 1.2rem;
+      padding-bottom: 2.4rem;
+      gap: 1.6rem;
+    }
 
     .result {
       display: flex;
@@ -44,6 +62,10 @@ export const QuestionBoard = styled.div`
       p {
         font-size: 2rem;
         font-weight: 700;
+
+        @media (max-width: 468px) {
+          font-size: 1.6rem;
+        }
       }
     }
 
@@ -58,18 +80,15 @@ export const QuestionBoard = styled.div`
       cursor: pointer;
       transition: color 0.2s ease-in;
 
+      @media (max-width: 468px) {
+        font-size: 1.2rem;
+      }
+
       &:hover {
         color: #4361ee;
       }
     }
   }
-`;
-
-export const Header = styled.header`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  z-index: 99999;
 `;
 
 export const SideInfos = styled.div`
@@ -90,6 +109,10 @@ export const SideInfos = styled.div`
     font-size: 3rem;
     font-weight: 700;
     color: #3a0ca3;
+
+    @media (max-width: 468px) {
+      font-size: 2.2rem;
+    }
   }
 `;
 
