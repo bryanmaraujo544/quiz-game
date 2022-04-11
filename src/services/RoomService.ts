@@ -9,7 +9,7 @@ class RoomService {
   httpClient: any;
 
   constructor() {
-    this.httpClient = axios('http://localhost:5000');
+    this.httpClient = axios('https://english-squiz-api.herokuapp.com/');
   }
 
   async listQuestions(roomId: number) {
