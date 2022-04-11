@@ -26,6 +26,7 @@ export const Text = styled.p`
   border-radius: 1.2rem;
   font-weight: 700;
   color: #fff;
+  text-align: center;
 `;
 
 export const Button = styled.div`

@@ -27,6 +27,7 @@ export const Room = () => {
   const [counter, setCounter] = useState(60);
 
   const { roomId } = useParams();
+  console.log({ roomId });
 
   const navigate = useNavigate();
   const { socket, setAllRooms, participant } = useContext(InfosContext);

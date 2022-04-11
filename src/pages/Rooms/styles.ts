@@ -32,10 +32,9 @@ export const Container = styled.div`
 export const Room = styled.div<RoomProps>`
   display: flex;
   gap: 3.2rem;
-  /* max-width: 30rem; */
-  max-width: 100%;
-  width: 30rem;
-  min-width: 20rem;
+  max-width: 30rem;
+  width: 100%;
+  /* min-width: 20rem; */
   flex-direction: column;
   align-items: center;
   justify-content: space-between;

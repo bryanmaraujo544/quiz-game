@@ -25,6 +25,7 @@ function App() {
         <InfosContextProvider>
           <BrowserRouter>
             <Routes>
+              <Route path="*" element={<h1>Not found</h1>} />
               <Route path="/" element={<Rooms />} />
               <Route path="/login/:roomId" element={<Login />} />
               <Route path="/room/:roomId" element={<Room />} />
