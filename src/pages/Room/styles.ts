@@ -6,6 +6,7 @@ interface Props {
 
 export const Container = styled.div<Props>`
   height: 100vh;
+  overflow: hidden;
   filter: ${({ hasStarted }) => (hasStarted ? 'blur(0px)' : 'blur(10px)')};
 `;
 

@@ -7,7 +7,7 @@ export const Container = styled.header`
   justify-content: space-between;
   margin-bottom: 1.6rem;
 
-  @media (max-width: 400px) {
+  @media (max-width: 468px) {
     flex-direction: column;
     gap: 1.6rem;
     margin-top: 1.6rem;
@@ -29,10 +29,14 @@ export const Container = styled.header`
 
   .username-div {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
     padding: 0.4rem;
     margin-top: 0.4rem;
+
+    @media (max-width: 468px) {
+      width: 100%;
+    }
 
     .username {
       font-size: 2rem;
@@ -60,14 +64,12 @@ export const Container = styled.header`
         padding: 0.4rem 1.6rem;
         border-radius: 999rem;
         border: 0;
-        width: 15rem;
-        /* text-align: right; */
-        background: #4361ee;
+        width: 100%;
+        border: 0.2rem solid #4361ee;
+        color: #4361ee;
         font-size: 1.8rem;
         font-weight: 700;
-        color: #fff;
         outline: none;
-        /* max-width: 100px; */
       }
 
       button {
