@@ -14,7 +14,6 @@ export const Container = styled.div<Props>`
   display: flex;
   flex-direction: column;
   flex: 1;
-  background: orange;
   width: 100%;
 
   .question-container {
