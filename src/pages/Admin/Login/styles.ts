@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,11 +20,11 @@ export const Container = styled.div`
       background: #fff;
       border: 0.2rem solid #4cc9f0;
       border-radius: 999rem;
-      height: 4.2rem;
+      height: 4.4rem;
       padding: 0 1.6rem;
       font-size: 1.6rem;
       font-weight: 700;
-      color: #4cc9f0;
+      color: #4361ee;
       outline: none;
     }
 
