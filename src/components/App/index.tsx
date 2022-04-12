@@ -9,6 +9,7 @@ import { Room } from '../../pages/Room';
 import { Login } from '../../pages/Login';
 import { InfosContextProvider } from '../../contexts/InfosContext';
 import { NotFound } from '../NotFound';
+import { Admin } from '../../pages/Admin';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
               <Route path="/" element={<Rooms />} />
               <Route path="/login/:roomId" element={<Login />} />
               <Route path="/room/:roomId" element={<Room />} />
+              <Route path="/admin" element={<Admin />} />
             </Routes>
           </BrowserRouter>
         </InfosContextProvider>
