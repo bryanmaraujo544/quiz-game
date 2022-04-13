@@ -14,7 +14,7 @@ export const Container = styled.div<Props>`
 export const QuestionBoard = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   align-items: center;
   padding: 0 2.4rem;

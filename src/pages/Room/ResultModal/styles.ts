@@ -6,6 +6,8 @@ interface UserProps {
 }
 
 export const ResultBoard = styled.div`
+  /* height: 100%; */
+  flex: 1;
   h3 {
     font-size: 2.4rem;
     color: #212529;
@@ -52,6 +54,7 @@ export const ResultBoard = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 100%;
     align-items: flex-start;
     gap: 0.6rem;
     overflow-y: scroll;

@@ -13,7 +13,8 @@ interface AltProps {
 export const Container = styled.div<Props>`
   display: flex;
   flex-direction: column;
-  flex: 1;
+  /* flex: 1; */
+  height: 100%;
   width: 100%;
 
   .question-container {
@@ -40,6 +41,7 @@ export const Container = styled.div<Props>`
     gap: 1.6rem;
     padding: 2.4rem 1.2rem;
     cursor: pointer;
+    /* flex: 1; */
 
     @media (max-width: 1072px) {
       grid-template-columns: repeat(2, 1fr);
