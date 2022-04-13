@@ -58,8 +58,12 @@ export const Modal = ({
   useEffect(() => {
     if (isModalOpen) {
       overlayControls.start('show');
+      document.body.style.height = '100vh';
+      document.body.style.overflow = 'hidden';
     } else {
       overlayControls.start('hidden');
+      document.body.style.height = 'auto';
+      document.body.style.overflow = 'visible';
     }
   }, [isModalOpen]);
 

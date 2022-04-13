@@ -143,6 +143,10 @@ export const CongratsContainer = styled.div`
     color: #fff;
     font-weight: 700;
 
+    @media (max-width: 468px) {
+      font-size: 3.6rem;
+    }
+
     .winner {
       color: #4361ee;
     }
