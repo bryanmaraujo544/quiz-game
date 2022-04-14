@@ -1,12 +1,35 @@
 import { useEffect, useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import RoomsService from '../../services/RoomsService';
 import { Login } from './Login';
-import { Container, Rooms, RoomCard, AddQuestion, Input } from './styles';
+import {
+  Container,
+  Rooms,
+  RoomCard,
+  AddQuestion,
+  InputGroup,
+  Input,
+} from './styles';
+
+interface QuestionForm {
+  questionContent: string;
+  correctAnswer: string;
+  alternative1: string;
+  alternative2: string;
+  alternative3: string;
+  alternative4: string;
+}
 
 export const Admin = () => {
   const [isAllowed, setIsAllowed] = useState(false);
   const [rooms, setRooms] = useState([] as any);
-  console.log({ rooms });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<QuestionForm>();
+
   useEffect(() => {
     (async () => {
       try {
@@ -17,6 +40,9 @@ export const Admin = () => {
       }
     })();
   }, []);
+
+  const onSubmit: SubmitHandler<QuestionForm> = (data) => {};
+
   console.log('admin');
   return (
     <Container>
@@ -34,14 +60,92 @@ export const Admin = () => {
               </RoomCard>
             ))}
           </div>
-          <AddQuestion>
-            <Input placeholder="Question Content" />
-            <Input placeholder="Correct Answer" />
+          <AddQuestion onSubmit={handleSubmit(onSubmit)}>
+            <InputGroup>
+              <Input
+                placeholder="Question Content"
+                {...register('questionContent', {
+                  required: true,
+                  maxLength: 48,
+                })}
+              />
+              <div className="error">
+                {errors.questionContent?.type === 'required'
+                  ? 'This field is required'
+                  : 'The string is too long.'}
+              </div>
+            </InputGroup>
+            <InputGroup>
+              <Input
+                placeholder="Correct Answer"
+                {...register('correctAnswer', {
+                  required: true,
+                  maxLength: 24,
+                })}
+              />
+              <div className="error">
+                {errors.correctAnswer?.type === 'required'
+                  ? 'This field is required'
+                  : 'The string is too long.'}
+              </div>
+            </InputGroup>
             <div className="alternatives">
-              <Input placeholder="Alternative 1" />
-              <Input placeholder="Alternative 2" />
-              <Input placeholder="Alternative 3" />
-              <Input placeholder="Alternative 4" />
+              <InputGroup>
+                <Input
+                  placeholder="Alternative 1"
+                  {...register('alternative1', {
+                    required: true,
+                    maxLength: 24,
+                  })}
+                />
+                <div className="error">
+                  {errors.questionContent?.type === 'required'
+                    ? 'This field is required'
+                    : 'The string is too long.'}
+                </div>
+              </InputGroup>
+              <InputGroup>
+                <Input
+                  placeholder="Alternative 2"
+                  {...register('alternative2', {
+                    required: true,
+                    maxLength: 24,
+                  })}
+                />
+                <div className="error">
+                  {errors.questionContent?.type === 'required'
+                    ? 'This field is required'
+                    : 'The string is too long.'}
+                </div>
+              </InputGroup>
+              <InputGroup>
+                <Input
+                  placeholder="Alternative 3"
+                  {...register('alternative3', {
+                    required: true,
+                    maxLength: 24,
+                  })}
+                />
+                <div className="error">
+                  {errors.questionContent?.type === 'required'
+                    ? 'This field is required'
+                    : 'The string is too long.'}
+                </div>
+              </InputGroup>
+              <InputGroup>
+                <Input
+                  placeholder="Alternative 4"
+                  {...register('alternative4', {
+                    required: true,
+                    maxLength: 24,
+                  })}
+                />
+                <div className="error">
+                  {errors.questionContent?.type === 'required'
+                    ? 'This field is required'
+                    : 'The string is too long.'}
+                </div>
+              </InputGroup>
             </div>
             <button type="submit" className="add-btn">
               Add question

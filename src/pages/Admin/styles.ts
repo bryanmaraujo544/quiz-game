@@ -9,6 +9,8 @@ export const Rooms = styled.div`
   padding: 3.2rem;
   background: #4361ee;
   height: 100%;
+  width: 100%;
+  overflow: hidden;
 
   .rooms-cards {
     display: flex;
@@ -96,6 +98,12 @@ export const AddQuestion = styled.form`
       background: #f7258599;
     }
   }
+`;
+
+export const InputGroup = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const Input = styled.input`
