@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface RoomCardProps {
+  isSelected: boolean;
+}
+
 export const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -10,7 +14,12 @@ export const Rooms = styled.div`
   background: #4361ee;
   height: 100%;
   width: 100%;
+  min-height: 100vh;
   overflow: hidden;
+
+  @media (max-width: 468px) {
+    padding: 2.4rem;
+  }
 
   .rooms-cards {
     display: flex;
@@ -21,7 +30,7 @@ export const Rooms = styled.div`
   }
 `;
 
-export const RoomCard = styled.div`
+export const RoomCard = styled.div<RoomCardProps>`
   flex: 1;
   max-width: 35rem;
   width: 100%;
@@ -32,8 +41,12 @@ export const RoomCard = styled.div`
   justify-content: space-between;
   gap: 1.6rem;
   background: #fff;
+  border: ${({ isSelected }) => (isSelected ? '3px solid #f72585' : '0')};
+  transform: ${({ isSelected }) => (isSelected ? 'scale(1.03)' : 'scale(1)')};
+  box-shadow: ${({ isSelected }) =>
+    isSelected ? '0 .2rem 2rem #00000010' : '0'};
   padding: 1.6rem;
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
 
   p {
     font-size: 1.6rem;
@@ -81,6 +94,10 @@ export const AddQuestion = styled.form`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.2rem;
+
+    @media (max-width: 498px) {
+      grid-template-columns: 1fr;
+    }
   }
 
   .add-btn {
@@ -104,6 +121,13 @@ export const InputGroup = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+
+  .error {
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: 500;
+    margin-top: 0.4rem;
+  }
 `;
 
 export const Input = styled.input`

@@ -59,7 +59,9 @@ export const Question = ({
   }
 
   async function handleConfirmAnswer() {
-    const isCorrect = answerChosen === correctAnswer;
+    const isCorrect =
+      answerChosen.toLowerCase() === correctAnswer.toLowerCase();
+
     console.log({ isCorrect });
 
     questionControls.start({
