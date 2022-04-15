@@ -60,6 +60,8 @@ export const Modal = ({
       overlayControls.start('show');
       document.body.style.height = '100vh';
       document.body.style.overflow = 'hidden';
+    } else {
+      overlayControls.start('hidden');
     }
   }, [isModalOpen]);
 

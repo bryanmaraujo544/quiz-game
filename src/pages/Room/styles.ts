@@ -5,7 +5,7 @@ interface Props {
 }
 
 export const Container = styled.div<Props>`
-  height: 100vh;
+  height: 100%;
   min-height: 100vh;
   width: 100%;
   overflow: hidden;

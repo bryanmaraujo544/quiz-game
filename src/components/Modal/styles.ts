@@ -20,14 +20,12 @@ export const Overlay = styled.div<Props>`
 `;
 
 export const ModalContainer = styled.div`
-  /* background: red; */
-
+  background: #fff;
   min-width: 30rem;
   width: 100%;
   max-width: 40rem;
   padding: 2.4rem;
   border-radius: 1.2rem;
-  display: none;
   flex-direction: column;
   align-items: center;
   max-height: calc(100vh - 16px);
