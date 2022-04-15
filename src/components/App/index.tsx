@@ -10,6 +10,7 @@ import { Login } from '../../pages/Login';
 import { InfosContextProvider } from '../../contexts/InfosContext';
 import { NotFound } from '../NotFound';
 import { Admin } from '../../pages/Admin';
+import { AddRoom } from '../../pages/Admin/AddRoom';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               <Route path="/login/:roomId" element={<Login />} />
               <Route path="/room/:roomId" element={<Room />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/admin/add-room" element={<AddRoom />} />
             </Routes>
           </BrowserRouter>
         </InfosContextProvider>

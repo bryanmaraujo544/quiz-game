@@ -11,6 +11,11 @@ interface Alternative {
   questionId: number;
 }
 
+interface Room {
+  roomTitle: string;
+  photoURL: string;
+}
+
 class AdminService {
   httpClient: any;
 
@@ -37,6 +42,15 @@ class AdminService {
       content: alternativeContent,
       questionId,
     });
+    return data;
+  }
+
+  async createRoom({ roomTitle, photoURL }: Room) {
+    const { data } = await this.httpClient.post('/rooms', {
+      title: roomTitle,
+      photoUrl: photoURL,
+    });
+
     return data;
   }
 }

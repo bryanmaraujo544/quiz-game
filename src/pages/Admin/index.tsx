@@ -136,6 +136,7 @@ export const Admin = () => {
                 </button>
               </RoomCard>
             ))}
+            <div className="add-room"></div>
           </div>
           {questionRoomId !== null && (
             <AddQuestion onSubmit={handleSubmit(onSubmit)}>
