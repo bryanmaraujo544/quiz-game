@@ -2,13 +2,13 @@
 
 <!---Esses são exemplos. Veja https://shields.io para outras pessoas ou para personalizar este conjunto de escudos. Você pode querer incluir dependências, status do projeto e informações de licença aqui--->
 
-![Animation](https://user-images.githubusercontent.com/62571814/161432889-df009922-e3d7-4c8c-9182-3dcdfcbc4550.gif)
+![Animation](https://user-images.githubusercontent.com/62571814/163643901-fc85454f-2818-4691-9624-4d657be93819.gif)
 
 
 ## Inviting members
-![Animation](https://user-images.githubusercontent.com/62571814/161433156-3267b59a-c435-4bd1-845a-a2056d879e9f.gif)
+![Animation](https://user-images.githubusercontent.com/62571814/163644434-0e063a6d-8517-4daf-94b7-6142ca4154c4.gif)
 
-> Application for users create and access columns and tasks. They can invite other members to their boards and access other boards if they got invited.
+> Quiz game where users can play with anothers one in real-time.
 
 ## 💻 How it works
 
