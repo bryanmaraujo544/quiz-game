@@ -29,6 +29,7 @@ export const Container = styled.div`
 
     @media (max-width: 468px) {
       grid-template-columns: 1fr;
+      justify-items: center;
     }
 
     .rooms-loading {
