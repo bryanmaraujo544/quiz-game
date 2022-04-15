@@ -109,18 +109,12 @@ export const Admin = () => {
       setAddQuestionHasClicked(false);
       toast.error(err?.response?.data?.message);
     }
-
-    // console.log({ data });
-
-    // console.log('Successfull', data);
   };
 
-  console.log('admin');
   return (
     <Container>
       {isAllowed ? (
         <Rooms>
-          <h1>Admin</h1>
           <div className="rooms-cards">
             {rooms.map((room: any) => (
               <RoomCard isSelected={questionRoomId === room.id}>

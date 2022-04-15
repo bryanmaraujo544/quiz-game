@@ -45,11 +45,11 @@ export const RoomCard = styled.div<RoomCardProps>`
   transform: ${({ isSelected }) => (isSelected ? 'scale(1.03)' : 'scale(1)')};
   box-shadow: ${({ isSelected }) =>
     isSelected ? '0 .2rem 2rem #00000010' : '0'};
-  padding: 1.6rem;
+  padding: 2rem;
   border-radius: 1.2rem;
 
   p {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: #4361ee;
   }
@@ -73,7 +73,7 @@ export const RoomCard = styled.div<RoomCardProps>`
     border: 0;
     background: #4361ee;
     color: #fff;
-    padding: 0.6rem 1.6rem;
+    padding: 0.8rem 1.6rem;
     border-radius: 0.8rem;
     font-weight: 700;
     cursor: pointer;
@@ -134,7 +134,7 @@ export const Input = styled.input`
   border: 0;
   background: #fff;
   height: 4.8rem;
-  border-radius: 0.8rem;
+  border-radius: 1.2rem;
   padding: 0 1.6rem;
   font-size: 1.6rem;
   font-weight: 700;
