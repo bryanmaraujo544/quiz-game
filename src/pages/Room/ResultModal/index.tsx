@@ -139,7 +139,9 @@ export const ResultModal = ({
         isModalOpen={isModalOpen}
         handleCloseModal={handleCloseModal}
         delayToOpen={0.5}
-        style={{ display: shallShowCongrats ? 'none' : 'flex' }}
+        style={{
+          display: isModalOpen ? (shallShowCongrats ? 'none' : 'flex') : 'none',
+        }}
       >
         <ResultBoard>
           <div className="result-board">

@@ -36,7 +36,7 @@ const overlayVariants = (delay?: number) => ({
 
 const modalVariants = {
   hidden: {
-    opacity: 1,
+    opacity: 0,
     scale: 0,
   },
   show: {
@@ -60,12 +60,13 @@ export const Modal = ({
       overlayControls.start('show');
       document.body.style.height = '100vh';
       document.body.style.overflow = 'hidden';
-    } else {
-      overlayControls.start('hidden');
-      document.body.style.height = 'auto';
-      document.body.style.overflow = 'visible';
     }
   }, [isModalOpen]);
+
+  function closeModal() {
+    handleCloseModal();
+    overlayControls.start('hidden');
+  }
 
   return ReactDOM.createPortal(
     <Overlay
@@ -78,10 +79,7 @@ export const Modal = ({
       <ModalContainer as={motion.div} variants={modalVariants} style={style}>
         <div className="header">
           <h3>{title}</h3>
-          <AiOutlineCloseCircle
-            className="icon"
-            onClick={() => handleCloseModal()}
-          />
+          <AiOutlineCloseCircle className="icon" onClick={() => closeModal()} />
         </div>
         <div className="body">{children}</div>
       </ModalContainer>
