@@ -5,7 +5,8 @@ interface Props {
 }
 
 export const Container = styled.div<Props>`
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   width: 100%;
   overflow: hidden;
   filter: ${({ hasStarted }) => (hasStarted ? 'blur(0px)' : 'blur(10px)')};

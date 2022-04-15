@@ -24,6 +24,12 @@ export const Header = () => {
         console.log('type something');
         return toast.error('Type something', { position: 'top-center' });
       }
+
+      if (newUsername === usernameInStorage) {
+        setIsToEdit(false);
+        return;
+      }
+
       const data: any = await LoginService.checkUsername(newUsername);
       if (!data?.isAuthorized) {
         return toast.error('This name is already been used :(', {
