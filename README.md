@@ -5,7 +5,7 @@
 ![Animation](https://user-images.githubusercontent.com/62571814/163643901-fc85454f-2818-4691-9624-4d657be93819.gif)
 
 
-## Inviting members
+## Admin Part
 ![Animation](https://user-images.githubusercontent.com/62571814/163644434-0e063a6d-8517-4daf-94b7-6142ca4154c4.gif)
 
 > Quiz game where users can play with anothers one in real-time.
