@@ -4,10 +4,17 @@ interface Props {
   isLarge: boolean;
 }
 
+interface QuestionProps {
+  isLarge: boolean;
+  isSuperLarge: boolean;
+}
+
 interface AltProps {
   isCorrect?: boolean;
   clicked?: boolean;
   isSelected?: boolean;
+  isLarge: boolean;
+  isSuperLarge: boolean;
 }
 
 export const Container = styled.div<Props>`
@@ -22,17 +29,6 @@ export const Container = styled.div<Props>`
     justify-content: center;
     align-items: center;
     flex: 1;
-
-    .question {
-      font-size: ${({ isLarge }) => (isLarge ? '2rem' : '3.2rem')};
-      font-weight: 700;
-      color: #3a0ca3;
-      text-align: center;
-
-      @media (max-width: 468px) {
-        font-size: ${({ isLarge }) => (isLarge ? '1.6rem' : '2.4rem')};
-      }
-    }
   }
 
   .alternatives {
@@ -62,7 +58,8 @@ export const Alternative = styled.div<AltProps>`
   padding: 2.4rem 0.8rem;
   flex: 1;
   color: #fff;
-  font-size: 2rem;
+  font-size: ${({ isLarge, isSuperLarge }) =>
+    isSuperLarge ? '1rem' : isLarge ? '1.4rem' : '1.8rem'};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -77,5 +74,18 @@ export const Alternative = styled.div<AltProps>`
 
   &:hover {
     background: #4cc9f0;
+  }
+`;
+
+export const QuestionContent = styled.p<QuestionProps>`
+  font-size: ${({ isLarge, isSuperLarge }) =>
+    isSuperLarge ? '1.8rem' : isLarge ? '2.4rem' : '3.2rem'};
+  font-weight: 700;
+  color: #3a0ca3;
+  text-align: center;
+
+  @media (max-width: 468px) {
+    font-size: ${({ isLarge, isSuperLarge }) =>
+      isSuperLarge ? '1.4rem' : isLarge ? '1.8rem' : '2.4rem'};
   }
 `;

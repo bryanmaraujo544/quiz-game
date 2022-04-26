@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import useSound from '../../hooks/use-sound';
 
-import { Container, Alternative } from './styles';
+import { Container, Alternative, QuestionContent } from './styles';
 import { Modal } from '../Modal';
 import { motion, useAnimation } from 'framer-motion';
 import CorrectSound from '../../assets/correct.mp3';
@@ -62,13 +62,12 @@ export const Question = ({
     const isCorrect =
       answerChosen.toLowerCase() === correctAnswer.toLowerCase();
 
-    console.log({ isCorrect });
-
     questionControls.start({
       y: -150,
       opacity: 0,
       transition: { duration: 0.1 },
     });
+
     questionControls.start({
       y: 0,
       opacity: 1,
@@ -111,7 +110,12 @@ export const Question = ({
       initial={{ y: -100, opacity: 0 }}
     >
       <motion.div className="question-container">
-        <p className="question">{content}</p>
+        <QuestionContent
+          isLarge={content.length > 32}
+          isSuperLarge={content.length > 48}
+        >
+          {content}
+        </QuestionContent>
       </motion.div>
       <motion.div className="alternatives">
         {alternatives?.map(({ id, content }: any) => (
@@ -119,6 +123,8 @@ export const Question = ({
             key={id}
             className="alternative"
             onClick={() => handleAnswerQuestion(content)}
+            isLarge={content.length > 20}
+            isSuperLarge={content.length > 32}
           >
             {content}
           </Alternative>

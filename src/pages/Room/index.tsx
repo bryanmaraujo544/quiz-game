@@ -24,7 +24,7 @@ export const Room = () => {
   const [correctAnswersAmount, setCorrectAnswersAmount] = useState(0);
   const [incorrectAnswersAmount, setIncorrectAnswersAmount] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [counter, setCounter] = useState(60);
+  const [counter, setCounter] = useState(120);
 
   const { roomId } = useParams();
   console.log({ roomId });

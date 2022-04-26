@@ -152,7 +152,7 @@ export const Admin = () => {
                   placeholder="Question Content"
                   {...register('questionContent', {
                     required: true,
-                    maxLength: 48,
+                    maxLength: 64,
                   })}
                 />
                 <div className="error">
@@ -168,7 +168,7 @@ export const Admin = () => {
                   placeholder="Correct Answer"
                   {...register('correctAnswer', {
                     required: true,
-                    maxLength: 24,
+                    maxLength: 42,
                   })}
                 />
                 <div className="error">
@@ -185,7 +185,7 @@ export const Admin = () => {
                     placeholder="Alternative 1"
                     {...register('alternative1', {
                       required: true,
-                      maxLength: 24,
+                      maxLength: 42,
                     })}
                   />
                   <div className="error">
@@ -201,7 +201,7 @@ export const Admin = () => {
                     placeholder="Alternative 2"
                     {...register('alternative2', {
                       required: true,
-                      maxLength: 24,
+                      maxLength: 42,
                     })}
                   />
                   <div className="error">
@@ -217,7 +217,7 @@ export const Admin = () => {
                     placeholder="Alternative 3"
                     {...register('alternative3', {
                       required: true,
-                      maxLength: 24,
+                      maxLength: 42,
                     })}
                   />
                   <div className="error">
@@ -233,7 +233,7 @@ export const Admin = () => {
                     placeholder="Alternative 4"
                     {...register('alternative4', {
                       required: true,
-                      maxLength: 24,
+                      maxLength: 42,
                     })}
                   />
                   <div className="error">
