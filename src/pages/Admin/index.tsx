@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import Loading from 'react-loading';
+
 import AdminService from '../../services/AdminService';
 import RoomsService from '../../services/RoomsService';
 import { Login } from './Login';
@@ -27,6 +29,7 @@ export const Admin = () => {
   const [rooms, setRooms] = useState([] as any);
   const [questionRoomId, setQuestionRoomId] = useState<number | null>(null);
   const [addQuestionHasClicked, setAddQuestionHasClicked] = useState(false);
+  const [roomsIsLoading, setRoomsIsLoading] = useState(true);
 
   const {
     register,
@@ -39,6 +42,7 @@ export const Admin = () => {
       try {
         const { data } = await RoomsService.listAllRooms();
         setRooms(data);
+        setRoomsIsLoading(false);
       } catch {
         console.log('err in admin');
       }
@@ -116,20 +120,29 @@ export const Admin = () => {
       {isAllowed ? (
         <Rooms>
           <div className="rooms-cards">
-            {rooms.map((room: any) => (
-              <RoomCard isSelected={questionRoomId === room.id}>
-                <p className="title">{room.title}</p>
-                <div className="img-container">
-                  <img src={room.photo_url} alt="room-thumb" />
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setQuestionRoomId(room.id)}
-                >
-                  Add Question
-                </button>
-              </RoomCard>
-            ))}
+            {roomsIsLoading ? (
+              <Loading
+                type="spinningBubbles"
+                height="12.8rem"
+                width="12.8rem"
+                className="rooms-loading"
+              />
+            ) : (
+              rooms.map((room: any) => (
+                <RoomCard isSelected={questionRoomId === room.id}>
+                  <p className="title">{room.title}</p>
+                  <div className="img-container">
+                    <img src={room.photo_url} alt="room-thumb" />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setQuestionRoomId(room.id)}
+                  >
+                    Add Question
+                  </button>
+                </RoomCard>
+              ))
+            )}
             <div className="add-room"></div>
           </div>
           {questionRoomId !== null && (

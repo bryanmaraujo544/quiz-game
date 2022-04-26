@@ -51,7 +51,7 @@ export const AddRoom = () => {
     <Container>
       <header>
         <h1>Create a New Room</h1>
-        <Button>Admin Page</Button>
+        <Button onClick={() => navigate('/admin')}>Admin Page</Button>
       </header>
       <Form onSubmit={handleSubmit}>
         <Input
