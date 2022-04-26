@@ -77,7 +77,7 @@ export const Rooms = () => {
   useEffect(() => {
     (async () => {
       try {
-        if (allRooms.length === 0) {
+        if (allRooms?.length === 0) {
           const { data: rooms } = await RoomsService.listAllRooms();
           setIsRoomsLoading(false);
           setAllRooms(rooms);

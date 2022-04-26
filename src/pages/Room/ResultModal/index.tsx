@@ -49,9 +49,6 @@ const textVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    // transition: {
-    //   staggerChildren: 0.5,
-    // },
   },
 };
 
@@ -172,7 +169,7 @@ export const ResultModal = ({
 
                   <b className="correct-answers">{correct_answers}</b>
                   <b className="time">
-                    {seconds_rest === 60 ? '60s' : `${60 - seconds_rest}s`}
+                    {seconds_rest === 120 ? '120s' : `${120 - seconds_rest}s`}
                     {username === usernameInStorage && (
                       <IoIosArrowForward className="arrow-icon" />
                     )}

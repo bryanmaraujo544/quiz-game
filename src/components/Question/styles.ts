@@ -59,7 +59,7 @@ export const Alternative = styled.div<AltProps>`
   flex: 1;
   color: #fff;
   font-size: ${({ isLarge, isSuperLarge }) =>
-    isSuperLarge ? '1rem' : isLarge ? '1.4rem' : '1.8rem'};
+    isSuperLarge ? '1.2rem' : isLarge ? '1.4rem' : '1.8rem'};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -79,13 +79,13 @@ export const Alternative = styled.div<AltProps>`
 
 export const QuestionContent = styled.p<QuestionProps>`
   font-size: ${({ isLarge, isSuperLarge }) =>
-    isSuperLarge ? '1.8rem' : isLarge ? '2.4rem' : '3.2rem'};
+    isSuperLarge ? '2.2rem' : isLarge ? '2.8rem' : '3.2rem'};
   font-weight: 700;
   color: #3a0ca3;
   text-align: center;
 
   @media (max-width: 468px) {
     font-size: ${({ isLarge, isSuperLarge }) =>
-      isSuperLarge ? '1.4rem' : isLarge ? '1.8rem' : '2.4rem'};
+      isSuperLarge ? '1.6rem' : isLarge ? '2rem' : '2.4rem'};
   }
 `;
