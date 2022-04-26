@@ -111,8 +111,8 @@ export const Question = ({
     >
       <motion.div className="question-container">
         <QuestionContent
-          isLarge={content.length > 32}
-          isSuperLarge={content.length > 48}
+          isLarge={content?.length > 32}
+          isSuperLarge={content?.length > 48}
         >
           {content}
         </QuestionContent>
@@ -123,8 +123,8 @@ export const Question = ({
             key={id}
             className="alternative"
             onClick={() => handleAnswerQuestion(content)}
-            isLarge={content.length > 20}
-            isSuperLarge={content.length > 32}
+            isLarge={content?.length > 20}
+            isSuperLarge={content?.length > 32}
           >
             {content}
           </Alternative>

@@ -188,7 +188,7 @@ export const Room = () => {
     location.reload();
   }
 
-  if (questions.length < 0) {
+  if (questions?.length < 0) {
     return <h1>loading</h1>;
   }
 
