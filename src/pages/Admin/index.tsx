@@ -152,7 +152,7 @@ export const Admin = () => {
                   placeholder="Question Content"
                   {...register('questionContent', {
                     required: true,
-                    maxLength: 64,
+                    maxLength: 96,
                   })}
                 />
                 <div className="error">
